@@ -13,7 +13,7 @@ Die Website wird durch Node.js bereitgestellt und die Daten werden mit [?] verar
     Und wenn ja, wie viele Sekunden hat man zum Antworten?
 * Wie viele Fragen muss man beantworten?
 * Wie viele Fragen gibt es? Nur so viele wie nötig, oder werden x aus y>x ausgewählt?
-* Sind die Fragen am Client bekannt sind, oder müssen sie vom Server übermittelt werden?
+* Sind die Fragen am Client bekannt, oder müssen sie vom Server übermittelt werden?
 * Wie werden die Ergebnisse zurück an den Server übermittelt? (Wie kriegt man einen Usernamen etc.?)
 * Wie werden die Antworten bewertet?
 
