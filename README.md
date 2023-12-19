@@ -1,7 +1,7 @@
 # Winterquiz 2024
 
 Winterquiz-Website and -Server.
-Die Website wird durch Node.js bereitgestellt und die Daten werden mit [?] verarbeitet.
+Die Website wird durch Node.js bereitgestellt und die Daten werden am Server aufbereitet.
 
 ---
 
@@ -10,12 +10,17 @@ Die Website wird durch Node.js bereitgestellt und die Daten werden mit [?] verar
 ### Generelle Entscheidungen
 
 * Gibt es einen Timer, der abläuft?  
-    Und wenn ja, wie viele Sekunden hat man zum Antworten?
-* Wie viele Fragen muss man beantworten?
-* Wie viele Fragen gibt es? Nur so viele wie nötig, oder werden x aus y>x ausgewählt?
-* Sind die Fragen am Client bekannt, oder müssen sie vom Server übermittelt werden?
+    Und wenn ja, wie viele Sekunden hat man zum Antworten?  
+    -> Ja, >= 15s
+* Wie viele Fragen muss man beantworten?  
+    -> ca. 8-10
+* Wie viele Fragen gibt es?  
+    -> Nur so viele wie nötig ~~, oder werden x aus y>x ausgewählt?~~
+* Sind die Fragen am Client bekannt, oder müssen sie vom Server übermittelt werden?  
+    -> Müssen an Client übermittelt werden
 * Wie werden die Ergebnisse zurück an den Server übermittelt? (Wie kriegt man einen Usernamen etc.?)
-* Wie werden die Antworten bewertet?
+* Wie werden die Antworten bewertet?  
+    -> alle gleich (1 Punkt pro Frage)
 
 ### Frontend
 
@@ -29,7 +34,7 @@ Die Website wird durch Node.js bereitgestellt und die Daten werden mit [?] verar
 
 ### Backend
 
-* [ ] (evtl. Einlesen aus externer Datei) und zufäliges Auswählen der Fragen
+* [ ] Einlesen aus externer Datei und zufäliges Auswählen der Fragen
 * [ ] Speicherung der Ergebnisse, die der Client zurückschickt
 * [ ] Visualisierung aller Ergebnisse (vgl. Bestenliste?)
 * [ ] Erstellen eines schönen QR-Codes
