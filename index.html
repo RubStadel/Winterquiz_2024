@@ -43,6 +43,30 @@
             filter: url(#noiseFilter);
         }
 
+        div {
+            font-size: 6vh;
+            font-weight: 500;
+            color: #585858;
+        }
+
+        button {
+            font-family: 'Marko One', sans-serif;
+            border: none;
+            height: 7vh;
+            padding: 0.25rem 0.75rem;
+            margin: 0.25rem;
+            border-radius: 5rem;
+            outline: none;
+            color: #585858;
+            background: white;
+            font-size: 4.25vh;
+        }
+
+        button:hover {
+            background-color: transparent;
+            border: 0.5rem solid white;
+        }
+
         .overlay {
             height: 0%;
             width: 100%;
@@ -87,6 +111,47 @@
             transition: 0.4s;
         }
 
+        .flip-card {
+            width: 90%;
+            height: 100%;
+            perspective: 2000px;
+            
+            min-height: 40vh;
+            max-height: 40vh;
+            margin: 1.5vh 0;
+        }
+
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+
+        /* So verschieben, dass es von JavaScript ausgeführt wird! */
+        /* .flip-card:hover .flip-card-inner {
+            transform: rotateY(180deg);
+        } */
+
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+        }
+
+        .flip-card-back {
+            transform: rotateY(180deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 3rem;
+            background-color: white;
+        }
+
         .invertedButtonColors {
             background-color: transparent;
             color: black;
@@ -96,44 +161,6 @@
         .invertedButtonColors:hover {
             color: white;
             background-color: black;
-        }
-
-        #landingTextField {
-            height: 35vh;
-            padding: 0 11vw;
-            text-align: justify;
-            font-size: 3vh;
-        }
-
-        #startButton {
-            height: 10vh;
-            width: 75vw;
-            border-radius: 2rem;
-            margin-top: 5.5vh;
-        }
-
-        div {
-            font-size: 6vh;
-            font-weight: 500;
-            color: #585858;
-        }
-
-        button {
-            font-family: 'Marko One', sans-serif;
-            border: none;
-            height: 7vh;
-            padding: 0.25rem 0.75rem;
-            margin: 0.25rem;
-            border-radius: 5rem;
-            outline: none;
-            color: #585858;
-            background: white;
-            font-size: 4.25vh;
-        }
-
-        button:hover {
-            background-color: transparent;
-            border: 0.5rem solid white;
         }
 
         .column {
@@ -151,32 +178,6 @@
             width: 100vw;
             margin: 0; 
         }
-
-        #questionRow {
-            min-height: 40vh;
-            max-height: 40vh;
-            margin: 1.5vh 0;
-        }
-
-        #question {
-            width: 90vw;
-            height: 100%;
-            color: white;
-            background: #5858585f;
-            border-radius: 3rem;
-            font-size: 6vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        #answersCol {
-            height: 42.5vh;
-            flex-flow: wrap;
-            align-content: center;
-            justify-content: center;
-            margin: 1vh 0;
-        }
         
         .fourAnswers {
             width: 40vw;
@@ -184,6 +185,13 @@
             margin: 1vh 3vw;
             border-radius: 2rem;
             background-color: #0f7a334e;
+            font-size: 2.25vh;
+        }
+
+        .fourAnswers:hover {
+            border: none;
+            outline: 0.4rem solid #0f7a3386;
+            outline-offset: -0.4rem;
         }
 
         .manyAnswers {
@@ -196,6 +204,46 @@
 
         .manyAnswers:hover {
             border: 0.3rem solid #0f7a3386;
+        }
+
+        #landingTextField {
+            height: 35vh;
+            padding: 0 11vw;
+            text-align: justify;
+            font-size: 3vh;
+        }
+
+        #startButton {
+            height: 10vh;
+            width: 75vw;
+            border-radius: 2rem;
+            margin-top: 5.5vh;
+        }
+
+        #questionRow {
+            min-height: 40vh;
+            max-height: 40vh;
+            margin: 1.5vh 0;
+        }
+
+        #question {
+            padding: 0 2vw;
+            height: 100%;
+            color: white;
+            background: #5858585f;
+            border-radius: 3rem;
+            font-size: 3.5vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #answersCol {
+            height: 42.5vh;
+            flex-flow: wrap;
+            align-content: center;
+            justify-content: center;
+            margin: 1vh 0;
         }
 
         #submitRow {
@@ -224,14 +272,23 @@
     </svg>
 
     <div class="column" style="height: 100vh;">
-        <div class="row" id="questionRow">
-            <div id="question">Frage</div>
+        <div class="flip-card">
+            <div class="flip-card-inner">
+                <div class="flip-card-front">
+                    <div id="question">
+                        Das Rentier ist die einzige Hirschart, die domestiziert wurde. Außerdem ist das Rentier die einzige Hirschart,
+                    </div>
+                </div>
+                <div class="flip-card-back">
+                    <img src="https://fsr7.studis-bht.de/wp-content/uploads/2022/06/FSR_LOGO-freigestellt.png" style="width: 85vw;">
+                </div>
+                </div>
         </div>
         <div class="column" id="answersCol">
-            <button class="fourAnswers">Antwort A</button>
-            <button class="fourAnswers">Antwort B</button>
-            <button class="fourAnswers">Antwort C</button>
-            <button class="fourAnswers">Antwort D</button>
+            <button class="fourAnswers">bei der Männchen und Weibchen ein Geweih tragen</button>
+            <button class="fourAnswers">bei der das Geweih nicht jährlich erneuert wird</button>
+            <button class="fourAnswers">die keine Gallenblase besitzt</button>
+            <button class="fourAnswers">die nicht Teil der Familie der Paarhufer ist</button>
 
             <!-- <button class="manyAnswers">Antwort A</button>
             <button class="manyAnswers">Antwort B</button>

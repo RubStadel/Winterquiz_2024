@@ -13,7 +13,7 @@ Die Website wird durch Node.js bereitgestellt und die Daten werden am Server auf
     Und wenn ja, wie viele Sekunden hat man zum Antworten?  
     -> Ja, >= 15s
 * Wie viele Fragen muss man beantworten?  
-    -> ca. 8-10
+    -> 8
 * Wie viele Fragen gibt es?  
     -> Nur so viele wie nötig ~~, oder werden x aus y>x ausgewählt?~~
 * Sind die Fragen am Client bekannt, oder müssen sie vom Server übermittelt werden?  
@@ -31,6 +31,7 @@ Die Website wird durch Node.js bereitgestellt und die Daten werden am Server auf
 * [ ] Implementierung der Fragenkarten-Flipanimation
 * [ ] Implementierung der Eiskristall-Animation (falls es einen Timer gibt)
 * [ ] Entscheiden, ob Rausch-Effekt verwendet werden soll
+* [ ] Entscheiden, ob zwei verschiedene Schriftgrößen für kurze/lange(mehrzeilige) Antwortmöglichkeiten existieren sollen
 
 ### Backend
 
