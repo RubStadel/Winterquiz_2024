@@ -1,0 +1,245 @@
+body {
+    height: 100%;
+    margin: 0px;
+    display: flex;
+    justify-content: center;
+      background-image: radial-gradient(circle at 25% 100%, #CCE4E2 0%, #a1fff9 55%, #d9375d 110%);
+    font-family: 'Marko One', sans-serif;
+    overflow: hidden;
+    /* disable selection */
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10 and IE 11 */
+    user-select: none; /* Standard syntax */
+}
+
+body::before,
+body::after {
+    position: absolute;
+    left: 0;
+    top: 0;
+    content: '';
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+
+    opacity: 30%;
+}
+
+/* grainy filter */
+body::before {
+    background: #8C8C8C;
+    filter: url(#noiseFilter);
+}
+
+div {
+    font-size: 6vh;
+    font-weight: 500;
+    color: #585858;
+}
+
+button {
+    font-family: 'Marko One', sans-serif;
+    border: none;
+    height: 7vh;
+    padding: 0.25rem 0.75rem;
+    margin: 0.25rem;
+    border-radius: 5rem;
+    outline: none;
+    color: #585858;
+    background: white;
+    font-size: 4.25vh;
+}
+
+button:hover {
+    background-color: transparent;
+    border: 0.5rem solid white;
+}
+
+.overlay {
+    height: 0%;
+    width: 100%;
+    position: fixed;
+    z-index: 2;
+    left: 0;
+    top: 0;
+    background-color: white;
+    overflow: hidden;
+    transition: 0.25s ease-out;
+}
+
+.overlay-content {
+    position: relative;
+    top: 0;
+    width: 100%;
+    text-align: center;
+    font-size: 4vh;
+}
+
+.overlay a {
+    padding: 8px;
+    text-decoration: none;
+    font-size: 3vh;
+    color: black;
+    display: inline;
+    transition: 0.25s;
+}
+
+.overlay p {
+    font-size: 5vh;
+    font-weight: bolder;
+}
+
+.overlay .closebtn {
+    position: fixed;
+    top: -2vh;
+    right: 5vw;
+    font-size: 5rem;
+    color: #585858;
+    display: none;
+    transition: 0.4s;
+}
+
+.flip-card {
+    width: 90%;
+    height: 100%;
+    perspective: 2000px;
+    
+    min-height: 40vh;
+    max-height: 40vh;
+    margin: 1.5vh 0;
+}
+
+.flip-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+}
+
+/* So verschieben, dass es von JavaScript ausgeführt wird! */
+/* .flip-card:hover .flip-card-inner {
+    transform: rotateY(180deg);
+} */
+
+.flip-card-front, .flip-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+
+.flip-card-back {
+    transform: rotateY(180deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 3rem;
+    background-color: white;
+}
+
+.invertedButtonColors {
+    background-color: transparent;
+    color: black;
+    border: 2px solid black;
+}
+
+.invertedButtonColors:hover {
+    color: white;
+    background-color: black;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100vw;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    margin: 0; 
+}
+
+.fourAnswers {
+    width: 40vw;
+    height: 20vh;
+    margin: 1vh 3vw;
+    border-radius: 2rem;
+    background-color: #0f7a334e;
+    font-size: 2.25vh;
+}
+
+.fourAnswers:hover {
+    border: none;
+    outline: 0.4rem solid #0f7a3386;
+    outline-offset: -0.4rem;
+}
+
+.manyAnswers {
+    width: 90vw;
+    height: 6.75vh;
+    font-size: 3.75vh;
+    border-radius: 2rem;
+    background-color: transparent;
+}
+
+.manyAnswers:hover {
+    border: 0.3rem solid #0f7a3386;
+}
+
+#landingTextField {
+    height: 35vh;
+    padding: 0 11vw;
+    text-align: justify;
+    font-size: 3vh;
+}
+
+#startButton {
+    height: 10vh;
+    width: 75vw;
+    border-radius: 2rem;
+    margin-top: 5.5vh;
+}
+
+#questionRow {
+    min-height: 40vh;
+    max-height: 40vh;
+    margin: 1.5vh 0;
+}
+
+#question {
+    padding: 0 2vw;
+    height: 100%;
+    color: white;
+    background: #5858585f;
+    border-radius: 3rem;
+    font-size: 3.5vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#answersCol {
+    height: 42.5vh;
+    flex-flow: wrap;
+    align-content: center;
+    justify-content: center;
+    margin: 1vh 0;
+}
+
+#submitRow {
+    min-height: 12.5vh;
+    max-height: 12.5vh;
+}
+
+#submitAnswerButton {
+    width: 90vw;
+    height: 78%;
+}

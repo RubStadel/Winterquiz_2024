@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Winterquiz</title>
+	<link rel="stylesheet" href="styles.css"/>
+    <script lang="javascript" src="scripts.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Marko+One&display=swap" rel="stylesheet"> 
+
+</head>
+
+<body>
+    
+    <svg>
+        <filter id="noiseFilter">
+        <feturbulence 
+            type="fractalNoise" 
+            baseFrequency="0.6" 
+            stitchTiles="stitch"/>
+        </filter>
+    </svg>
+
+    <div class="column" style="height: 100vh;">
+        <div class="flip-card">
+            <div class="flip-card-inner">
+                <div class="flip-card-front">
+                    <div id="question">
+                        Das Rentier ist die einzige Hirschart, die domestiziert wurde. Außerdem ist das Rentier die einzige Hirschart,
+                    </div>
+                </div>
+                <div class="flip-card-back">
+                    <img src="https://fsr7.studis-bht.de/wp-content/uploads/2022/06/FSR_LOGO-freigestellt.png" style="width: 85vw;">
+                </div>
+                </div>
+        </div>
+        <div class="column" id="answersCol">
+            <button class="fourAnswers">bei der Männchen und Weibchen ein Geweih tragen</button>
+            <button class="fourAnswers">bei der das Geweih nicht jährlich erneuert wird</button>
+            <button class="fourAnswers">die keine Gallenblase besitzt</button>
+            <button class="fourAnswers">die nicht Teil der Familie der Paarhufer ist</button>
+
+            <!-- <button class="manyAnswers">Antwort A</button>
+            <button class="manyAnswers">Antwort B</button>
+            <button class="manyAnswers">Antwort C</button>
+            <button class="manyAnswers">Antwort D</button>
+            <button class="manyAnswers">Antwort E</button>
+            <button class="manyAnswers">Antwort F</button> -->
+        </div>
+        <div class="row" id="submitRow">
+            <button id="submitAnswerButton" onclick="checkAnswer()">antworten</button>
+        </div>
+    </div>
+
+    <div id="landingNav" class="overlay">
+		<div class="overlay-content">
+			<button id="startButton" onclick="startGame();">start</button>
+		</div>
+	</div>
+
+</body>
+
+</html>

@@ -9,10 +9,9 @@ const io = new Server(server);
 const csv = require("csv-parser")				// "Package" csv-parser
 const fs = require('fs');						// "Package" fs (Filestring)
 
-// send html file to client when they open the website
-app.get('/', (req, res) => {
-	res.sendFile(__dirname + '/index.html');								// send the html file located in the same directory as this file
-});
+// send frontend files to client when they open the website
+
+app.use(express.static("public"));
 
 /// start listening on the designated port
 
