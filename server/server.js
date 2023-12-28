@@ -11,7 +11,7 @@ const fs = require('fs');						// "Package" fs (Filestring)
 
 // send frontend files to client when they open the website
 
-app.use(express.static("public"));
+app.use(express.static("../public"));
 
 /// start listening on the designated port
 

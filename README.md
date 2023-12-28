@@ -35,7 +35,26 @@ Die Website wird durch Node.js bereitgestellt und die Daten werden am Server auf
 
 ### Backend
 
-* [ ] Einlesen aus externer Datei und zufäliges Auswählen der Fragen
+* [x] Einlesen aus externer Datei und zufälliges Auswählen der Fragen
+* [ ] Austausch mit dem Client
 * [ ] Speicherung der Ergebnisse, die der Client zurückschickt
+    * [ ] Anonyme Speicherung aller Fragen mit zugehöriger Antwort (answers.csv)
+    * [ ] Speicherung der Highscores mit zugehörigem Namen (scores.csv)
 * [ ] Visualisierung aller Ergebnisse (vgl. Bestenliste?)
-* [ ] Erstellen eines schönen QR-Codes
+* [x] Erstellen eines schönen QR-Codes
+
+---
+
+## Inbetriebnahme
+
+### Benötigte Pakete
+
+* `npm install express@4`
+* `npm install socket.io`
+* `npm install csv-parser`
+* `npm install csv-writer`
+
+### Start
+
+* Die Datei *server.js* muss aus dem Order ***server*** gestartet werden (`cd ../server`).
+* Das serverstartende Endgerät öffnet auf einen Zugang auf Port 3000
