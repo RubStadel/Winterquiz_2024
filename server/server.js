@@ -78,7 +78,7 @@ io.on("connection", (socket) => {
 		// every playerobject has a playercount to differentiate
 		playerarr[playercount] = new Player(playername, IP);
 		playercount++;
-		socket.emit("get_playernum", playercount);
+		socket.emit("receive_playernum", playercount);
 	});
 
 	// PC for playercount as argument
