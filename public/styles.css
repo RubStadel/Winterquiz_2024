@@ -3,7 +3,7 @@ body {
     margin: 0px;
     display: flex;
     justify-content: center;
-      background-image: radial-gradient(circle at 25% 100%, #CCE4E2 0%, #a1fff9 55%, #d9375d 110%);
+      background-image: radial-gradient(circle at 25% 100%, #CCE4E2 0%, #b3fffa 55%, #d74b6c 110%);
     font-family: 'Marko One', sans-serif;
     overflow: hidden;
     /* disable selection */
@@ -56,15 +56,17 @@ button:hover {
 }
 
 .overlay {
-    height: 0%;
+    height: 100%;
     width: 100%;
     position: fixed;
     z-index: 2;
     left: 0;
     top: 0;
-    background-color: white;
+    background-color: rgba(150, 150, 150, 0.25);
     overflow: hidden;
-    transition: 0.25s ease-out;
+    transition: 0.2s ease-out;
+    backdrop-filter: blur(2.5vh);
+    text-shadow: 0 0 0.15rem black;
 }
 
 .overlay-content {
@@ -73,6 +75,10 @@ button:hover {
     width: 100%;
     text-align: center;
     font-size: 4vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .overlay a {
@@ -85,7 +91,8 @@ button:hover {
 }
 
 .overlay p {
-    font-size: 5vh;
+    color: white;
+    font-size: 3.5vh;
     font-weight: bolder;
 }
 
@@ -104,8 +111,8 @@ button:hover {
     height: 100%;
     perspective: 2000px;
     
-    min-height: 40vh;
-    max-height: 40vh;
+    min-height: 35vh;
+    max-height: 35vh;
     margin: 1.5vh 0;
 }
 
@@ -114,14 +121,10 @@ button:hover {
     width: 100%;
     height: 100%;
     text-align: center;
-    transition: transform 0.6s;
+    transition: transform 0.7s;
     transform-style: preserve-3d;
+    transform: rotateY('0deg');
 }
-
-/* So verschieben, dass es von JavaScript ausgeführt wird! */
-/* .flip-card:hover .flip-card-inner {
-    transform: rotateY(180deg);
-} */
 
 .flip-card-front, .flip-card-back {
     position: absolute;
@@ -169,11 +172,11 @@ button:hover {
 
 .fourAnswers {
     width: 40vw;
-    height: 20vh;
+    height: 17.5vh;
     margin: 1vh 3vw;
     border-radius: 2rem;
     background-color: #0f7a334e;
-    font-size: 2.25vh;
+    font-size: 2.35vh;
 }
 
 .fourAnswers:hover {
@@ -201,11 +204,17 @@ button:hover {
     font-size: 3vh;
 }
 
+#gameInstructions {
+    width: 80vw;
+    height: 65vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 #startButton {
     height: 10vh;
     width: 75vw;
-    border-radius: 2rem;
-    margin-top: 5.5vh;
 }
 
 #questionRow {
@@ -220,14 +229,14 @@ button:hover {
     color: white;
     background: #5858585f;
     border-radius: 3rem;
-    font-size: 3.5vh;
+    font-size: 3.25vh;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
 #answersCol {
-    height: 42.5vh;
+    height: 37.5vh;
     flex-flow: wrap;
     align-content: center;
     justify-content: center;
