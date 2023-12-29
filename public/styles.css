@@ -111,9 +111,9 @@ button:hover {
     height: 100%;
     perspective: 2000px;
     
-    min-height: 35vh;
-    max-height: 35vh;
-    margin: 1.5vh 0;
+    min-height: 40vh;
+    max-height: 40vh;
+    margin: 2.5vh 0;
 }
 
 .flip-card-inner {
@@ -172,7 +172,7 @@ button:hover {
 
 .fourAnswers {
     width: 40vw;
-    height: 17.5vh;
+    height: 20vh;
     margin: 1vh 3vw;
     border-radius: 2rem;
     background-color: #0f7a334e;
@@ -236,11 +236,11 @@ button:hover {
 }
 
 #answersCol {
-    height: 37.5vh;
+    height: 40vh;
     flex-flow: wrap;
     align-content: center;
     justify-content: center;
-    margin: 1vh 0;
+    margin: 2vh 0;
 }
 
 #submitRow {

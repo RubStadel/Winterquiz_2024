@@ -5,20 +5,23 @@ const http = require("http");
 const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
-const csv = require("csv-parser")				// "Package" csv-parser
-const fs = require("fs");						// "Package" fs (Filestring)
+const csv = require("csv-parser")				// Package csv-parser
+const fs = require("fs");						// Package fs (Filestring)
+
 // init csv-writer for answers.csv to log the anonymous answers with questions
 const createCsvWriter = require("csv-writer").createObjectCsvWriter;
+
 // create csv writer for the anonymous logging
-const write_answers_anon = createCsvWriter({
+const writeAnswersAnon = createCsvWriter({
     path: "answers.csv",
     header: [
         {id: "question", title: "QUESTION"},
         {id: "answer", title: "ANSWER"}
     ]
 });
+
 // create csv writer for the score
-const write_score = createCsvWriter({
+const writeScore = createCsvWriter({
     path: "scores.csv",
     header: [
         {id: "name", title: "NAME"},
@@ -26,8 +29,8 @@ const write_score = createCsvWriter({
     ]
 });
 
-let playercount = 0;	// counts the playerobjects
-let playerarr = [];		// array to fill with playerobjects
+let playerCount = 0;	// counts the playerobjects
+let playerArr = [];		// array to fill with playerobjects
 // name of array is moderator because it contains all questions, answers and explanations
 // id´s: question, answer0, answer1, answer2, answer3, explanation
 const moderator = [];
@@ -35,22 +38,22 @@ let scores = [];		// array to fill with usernames and scores
 
 // class, for each player one object
 class Player {
-    constructor(playername,IP) {
-		this.playername = playername;
+    constructor(playerName, IP) {
+		this.playerName = playerName;
         this.IP = IP;
 		// start the unused questions with 8 numbers 0-7
-        this.unusedquestions = Array.from({length: 8}, (_, index) => index);
-        this.currnum;   	// current number, refers to moderator
+        this.unusedQuestions = Array.from({length: 8}, (_, index) => index);
+        this.currNum;   	// current number, refers to moderator
 		this.points = 0;	// highscore points
 	}
 	// calculate new current number
-	newcurrnum(){
-        if (this.unusedquestions){
-            // get random number of remaining unusedquestions array
-            let randnum = Math.floor(Math.random() * this.unusedquestions.length);
+	newCurrNum(){
+        if (this.unusedQuestions){
+            // get random number of remaining unusedQuestions array
+            let randNum = Math.floor(Math.random() * this.unusedQuestions.length);
             // delete the random number out of array and update array
-            this.currnum = this.unusedquestions.splice(randnum, 1);
-            return this.currnum;
+            this.currNum = this.unusedQuestions.splice(randNum, 1);
+            return this.currNum;
         }
         else return 8;	// 8 is impossible to get as a current number (0-7)
     }
@@ -73,55 +76,55 @@ app.use(express.static("../public"));
 /// eventHandlers that are active as long as a client is connected
 io.on("connection", (socket) => {
 
-	socket.on("start", (playername, IP) => {
-		// fill playerarray with playerobjects
-		// every playerobject has a playercount to differentiate
-		playerarr[playercount] = new Player(playername, IP);
-		playercount++;
-		socket.emit("receive_playernum", playercount);
+	socket.on("start", (playerName, IP) => {
+		// fill playerArray with playerobjects
+		// every playerobject has a playerCount to differentiate
+		playerArr[playerCount] = new Player(playerName, IP);
+		playerCount++;
+		socket.emit("receive_playernum", playerCount);
 	});
 
-	// PC for playercount as argument
-	// pc for playercount as id in object of playerarray
+	// PC for playerCount as argument
+	// pc for playerCount as id in object of playerArray
 	socket.on("get_question", (PC) => {
 		// temporary variable
-		let t = playerarr[PC].newcurrnum();
-		let answerarr = [        
-			{a: moderator[t].answer0, n: 0},
+		let t = playerArr[PC].newCurrNum();
+		let answerArr = [        
+			{a: moderator[t].answer0, n: 0},					// wozu ist n gut?!
         	{a: moderator[t].answer1, n: 1},
         	{a: moderator[t].answer2, n: 2},
         	{a: moderator[t].answer3, n: 3}
 		];
 		socket.emit("receive_question", 
 			moderator[t].question,
-			answerarr
+			answerArr
 		);
 	});
 
 	// ans(wer) must be in [0,1,2,3], 0 is the right answer
 	socket.on("get_result", (PC, ans) => {
 		// log anonymously
-		const loganon = [{question: playerarr[PC].currnum, answer: ans}];
+		const logAnon = [{question: playerArr[PC].currNum, answer: ans}];
         
-        write_answers_anon.writeRecords(loganon)       // returns a promise
+        writeAnswersAnon.writeRecords(logAnon)       // returns a promise
         .then(() => {
             console.log("question and answer logged anonymously");
         });
 
-		let tempbool = false;
-		// if (answer==moderator[playerarr[PC].currnum].answer0){
-		if (ans==0){
-			playerarr[PC].points++;
-			tempbool = true;
+		let tempBool = false;
+		// if (answer==moderator[playerArr[PC].currNum].answer0){
+		if (ans == 0){
+			playerArr[PC].points++;
+			tempBool = true;
 		}
 		socket.emit("receive_result", 
-			tempbool,
-			moderator[playerarr[PC].currnum].explanation
+			tempBool,
+			moderator[playerArr[PC].currNum].explanation
 		);
-		if (!playerarr[PC].unusedquestions){
+		if (!playerArr[PC].unusedQuestions){
 			const score_entry = [{
-				name: playerarr[PC].playername, 
-				score: playerarr[PC].score
+				name: playerArr[PC].playerName, 
+				score: playerArr[PC].score
 			}];
         
         	csvWriter.writeRecords(score_entry)       // returns a promise
@@ -141,13 +144,14 @@ io.on("connection", (socket) => {
 					myResolve();
 				});
 			});
+			myPromise.then(
+				function() {
+					socket.emit("receive_scores", scores);
+				},
+			);
 		}
 	});
-	myPromise.then(
-		function() {
-			socket.emit("receive_scores", scores);
-		},
-	);
+	
 });
 
 

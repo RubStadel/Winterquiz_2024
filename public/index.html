@@ -5,10 +5,11 @@
     <meta charset="UTF-8">
     <title>Winterquiz</title>
 	<link rel="stylesheet" href="styles.css"/>
-    <script lang="javascript" src="scripts.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Marko+One&display=swap" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css2?family=Marko+One&display=swap" rel="stylesheet">
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <script lang="javascript" src="scripts.js"></script>
 
 </head>
 
@@ -37,10 +38,10 @@
                 </div>
         </div>
         <div class="column" id="answersCol">
-            <button class="fourAnswers">Antwort A</button>
-            <button class="fourAnswers">Antwort B</button>
-            <button class="fourAnswers">Antwort C</button>
-            <button class="fourAnswers">Antwort D</button>
+            <button class="fourAnswers" id="answer0" onclick="checkAnswer(0)">Antwort A</button>
+            <button class="fourAnswers" id="answer1" onclick="checkAnswer(1)">Antwort B</button>
+            <button class="fourAnswers" id="answer2" onclick="checkAnswer(2)">Antwort C</button>
+            <button class="fourAnswers" id="answer3" onclick="checkAnswer(3)">Antwort D</button>
 
             <!-- <button class="manyAnswers">Antwort A</button>
             <button class="manyAnswers">Antwort B</button>
@@ -48,9 +49,6 @@
             <button class="manyAnswers">Antwort D</button>
             <button class="manyAnswers">Antwort E</button>
             <button class="manyAnswers">Antwort F</button> -->
-        </div>
-        <div class="row" id="submitRow">
-            <button id="submitAnswerButton" onclick="checkAnswer()">antworten</button>
         </div>
     </div>
 

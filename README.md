@@ -11,7 +11,7 @@ Die Website wird durch Node.js bereitgestellt und die Daten werden am Server auf
 
 * Gibt es einen Timer, der abläuft?  
     Und wenn ja, wie viele Sekunden hat man zum Antworten?  
-    -> Ja, >= 15s
+    -> Ja, >= 15s (20s ?)
 * Wie viele Fragen muss man beantworten?  
     -> 8
 * Wie viele Fragen gibt es?  
@@ -27,8 +27,12 @@ Die Website wird durch Node.js bereitgestellt und die Daten werden am Server auf
 * [x] Erstellen eines ersten Entwurfs der Hauptseite
 * [x] Erstellen der Startseite, die Informationen über das Quiz enthält
 * [ ] Erstellen der Ergebnisseite, die die finale Punktzahl anzeigt
-* [ ] Implementierung des Spielflusses
-* [x] Implementierung der Fragenkarten-Flipanimation
+* [ ] Implementierung des Spielflusses  
+    -> [ ] Einfügen eines Username-Formulars in/nach der Startseite  
+    -> [ ] Herausfinden, wie man mit JS die IP-Adresse ausliest und das implementieren
+* [x] Implementierung der Fragenkarten-Flipanimation  
+    -> [ ] Entscheiden, wo die Erklärung der Antwort angezeigt wird  
+    (Statt Frage? Statt Antworten? Auf Rückseite der Fragekarte?)
 * [ ] Implementierung der Eiskristall-Animation
 * [x] Entscheiden, ob Rausch-Effekt verwendet werden soll  
     -> ja, mindestens für Haupt-Hintergrund

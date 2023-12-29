@@ -1,16 +1,15 @@
 "use strict";
-src="/socket.io/socket.io.js"; // include the socket.io library ?
 
-var socket = io();  // starting the socket connection using socket.io library
-let playername;     // username given by the player
-let ip;             // some sort of IP-address of the player
-var playercount;    // PlayerCount (PC) (to differentiate between players)
-var currentquestion;// current question as string
-var answerarr = []; // array of objects of the answers
-var shuffledanswers = [];   //array of shuffled answers
-var numswap = [];   // when answers are shuffled, this array keeps track
-var answerstat;     // bool variable to determine right or wrong answers
-var currexplanation;// string of the explanation to current question
+let socket = io();                          // starting the socket connection using socket.io library
+let playerName;                             // username given by the player
+let ip;                                     // some sort of IP-address of the player
+let playerCount;                            // PlayerCount (PC) (to differentiate between players)
+let currentQuestion;                        // current question as string
+let answerArr = [];                         // array of objects of the answers
+let shuffledAnswers = [];                   //array of shuffled answers
+let numSwap = [];                           // when answers are shuffled, this array keeps track
+let answerStat;                             // bool variable to determine right or wrong answers
+let currExplanation;                        // string of the explanation to current question
 
 /// functions controlling game flow
 
@@ -18,51 +17,39 @@ function startGame() {
     document.getElementById("landingNav").style.height = "0%";
     // get first question and its answers from server and display them
     // Pseudo: player has to enter a username and javascript has to get IP
-    socket.emit("start", playername, ip);
+    socket.emit("start", playerName, ip);
 }
 
 socket.on("receive_playernum", (PC) => {
     // directly after assigning the PC, the command to send the question is given
-    playercount = PC;
-    socket.emit("get_question", playercount);
+    playerCount = PC;
+    socket.emit("get_question", playerCount);
 });
-socket.on("receive_question", (queststr, answerarray) => {
+
+socket.on("receive_question", (questStr, answerArray) => {
     // question as string and answers as array is given
     // each answer in the array has a string (a) and a number (n)
-    currentquestion = queststr;
-    answerarr = answerarray;
-    shuffleanswers();
-    // display the question like: 
-    // 1. answer = shuffledanswer[0], 2. answer = shuffledanswer[1] ...
+    currentQuestion = questStr;
+    answerArr = answerArray;
+    shuffleAnswers();
+
+    document.getElementById("question").textContent = currentQuestion;
+
+    for (let i = 0; i < 4; i++) {
+        document.getElementById(`answer${i}`).textContent = shuffledAnswers[i];
+    }
 });
 
-function shuffleanswers(){
-    // this function shuffles and empties the answerarr 
-    // and puts it in shuffledanswers and keeps track
-    // of it in numswap
-    let randnums = [0,1,2,3]; // good ol´ hardcode
-    let randnum;
-    for (let i; i<4; i++){
-        // pick a random number out of randnums
-        randnum = Math.floor(Math.random() * randnums.length);
-        // pluck the randnumth answers out of answerarr and put it in shuffledanswers
-        shuffledanswers[i] = answerarr.splice(randnum,1);
-        // keep track with the numswap array
-        numswap[i] = randnum;
-    }
-}
-
-function checkAnswer(ansnum) {
+function checkAnswer(answerNumber) {
     // check answer
-    // get a number by clicking on the available answer as ansnum (?) (number 0-3)
-    socket.emit("get_result", numswap[ansnum]);
-    // get and display next question
+    // get a number by clicking on the available answer as answerNumber (0-3)
+    socket.emit("get_result", numSwap[answerNumber]);
 }
 
-socket.on("receive_result", (answerstatus, explanation) => {
-    // answerstatus true or false, explanation is a string
-    answerstat = answerstatus;
-    currexplanation = explanation;
+socket.on("receive_result", (answerStatus, explanation) => {
+    // answerStatus true or false, explanation is a string
+    answerStat = answerStatus;
+    currExplanation = explanation;
     // now it has to be displayed
 });
 
@@ -72,9 +59,26 @@ socket.on("receive_scores", (scores) => {
     // sort by score descending
     scores.sort((a, b) => b.score - a.score);
     // following 2 lines is functional pseudocode
-    let bestplayer = scores[0].name;
-    let scoreofbestplayer = scores[0].score;
+    let bestPlayer = scores[0].name;
+    let scoreOfBestPlayer = scores[0].score;
 });
+
+/// function to randomize answer order
+
+function shuffleAnswers(){
+    // this function shuffles and empties the answerArr 
+    // and puts it in shuffledAnswers and keeps track
+    // of it in numSwap
+    let randNum;
+    for (let i = 0; i < 4; i++) {
+        // pick a random number between 0 and (answerArr.length - 1)
+        randNum = Math.floor(Math.random() * (answerArr.length));
+        // pluck the randNumth answer out of answerArr and put it in shuffledAnswers
+        shuffledAnswers[i] = answerArr.splice(randNum, 1);
+        // keep track with the numSwap array
+        numSwap[i] = randNum;
+    }
+}
 
 /// functions handling visual updates
 
