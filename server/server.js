@@ -8,7 +8,8 @@ const io = new Server(server);
 const csv = require("csv-parser")				// Package csv-parser
 const fs = require("fs");						// Package fs (Filestring)
 
-// init csv-writer for answers.csv to log the anonymous answers with questions
+
+// init csv-writer to log into csv
 const createCsvWriter = require("csv-writer").createObjectCsvWriter;
 
 // create csv writer for the anonymous logging
@@ -35,6 +36,9 @@ let playerArr = [];		// array to fill with playerobjects
 // id´s: question, answer0, answer1, answer2, answer3, explanation
 const moderator = [];
 let scores = [];		// array to fill with usernames and scores
+// array to keep track of used IPs
+// name? usedIParr, usedIpArr?
+const usedIPs = [];
 
 // class, for each player one object
 class Player {
@@ -55,7 +59,7 @@ class Player {
             this.currNum = this.unusedQuestions.splice(randNum, 1);
             return this.currNum;
         }
-        else return 8;	// 8 is impossible to get as a current number (0-7)
+        // else return 8;	// 8 is impossible to get as a current number (0-7)
     }
 }
 
@@ -79,9 +83,18 @@ io.on("connection", (socket) => {
 	socket.on("start", (playerName, IP) => {
 		// fill playerArray with playerobjects
 		// every playerobject has a playerCount to differentiate
-		playerArr[playerCount] = new Player(playerName, IP);
-		playerCount++;
-		socket.emit("receive_playernum", playerCount);
+		if (!usedIPs.includes(IP)){
+			playerArr[playerCount] = new Player(playerName, IP);
+			socket.emit("receive_playernum", playerCount);
+			usedIPs[playerCount] = IP;
+			playerCount++;
+		}
+		else {
+			// if IP of object exists, find index in playerArr
+			// because index equals value of playerArr, the index is enough
+			const searchIP = (obj) => obj.IP == IP;
+			socket.emit("receive_playernum", playerArr.findIndex(searchIP))
+		}
 	});
 
 	// PC for playerCount as argument
@@ -90,10 +103,10 @@ io.on("connection", (socket) => {
 		// temporary variable
 		let t = playerArr[PC].newCurrNum();
 		let answerArr = [        
-			{a: moderator[t].answer0, n: 0},					// wozu ist n gut?!
-        	{a: moderator[t].answer1, n: 1},
-        	{a: moderator[t].answer2, n: 2},
-        	{a: moderator[t].answer3, n: 3}
+			moderator[t].answer0,
+        	moderator[t].answer1,
+        	moderator[t].answer2,
+        	moderator[t].answer3
 		];
 		socket.emit("receive_question", 
 			moderator[t].question,
@@ -112,7 +125,6 @@ io.on("connection", (socket) => {
         });
 
 		let tempBool = false;
-		// if (answer==moderator[playerArr[PC].currNum].answer0){
 		if (ans == 0){
 			playerArr[PC].points++;
 			tempBool = true;
