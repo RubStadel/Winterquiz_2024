@@ -247,8 +247,3 @@ button:hover {
     min-height: 12.5vh;
     max-height: 12.5vh;
 }
-
-#submitAnswerButton {
-    width: 90vw;
-    height: 78%;
-}

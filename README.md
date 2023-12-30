@@ -1,7 +1,7 @@
 # Winterquiz 2024
 
 Winterquiz-Website and -Server.
-Die Website wird durch Node.js bereitgestellt und die Daten werden am Server aufbereitet.
+Die Website wird durch Node.js (Express) bereitgestellt, Kommunikation läuft über Sockets und die Daten werden am Server aufbereitet.
 
 ---
 
@@ -28,8 +28,8 @@ Die Website wird durch Node.js bereitgestellt und die Daten werden am Server auf
 * [x] Erstellen der Startseite, die Informationen über das Quiz enthält
 * [ ] Erstellen der Ergebnisseite, die die finale Punktzahl anzeigt
 * [ ] Implementierung des Spielflusses  
-    -> [ ] Einfügen eines Username-Formulars in/nach der Startseite  
-    -> [ ] Herausfinden, wie man mit JS die IP-Adresse ausliest und das implementieren
+  * [ ] Einfügen eines Username-Formulars in/nach der Startseite
+  * [ ] Herausfinden, wie man mit JS die IP-Adresse ausliest und das implementieren
 * [x] Implementierung der Fragenkarten-Flipanimation  
     -> [ ] Entscheiden, wo die Erklärung der Antwort angezeigt wird  
     (Statt Frage? Statt Antworten? Auf Rückseite der Fragekarte?)
