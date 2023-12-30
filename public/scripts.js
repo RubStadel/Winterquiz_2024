@@ -1,8 +1,8 @@
 "use strict";
 
 let socket = io();                          // starting the socket connection using socket.io library
-let playerName;                             // username given by the player
-let ip;                                     // some sort of IP-address of the player
+let playerName = "Herbert";                 // placeholder // username given by the player
+let ip = "192.168.1.125";                   // placeholder // some sort of IP-address of the player
 let playerCount;                            // PlayerCount (PC) (to differentiate between players)
 let currentQuestion;                        // current question as string
 let answerArr = [];                         // array of objects of the answers
@@ -43,7 +43,7 @@ socket.on("receive_question", (questStr, answerArray) => {
 function checkAnswer(answerNumber) {
     // check answer
     // get a number by clicking on the available answer as answerNumber (0-3)
-    socket.emit("get_result", numSwap[answerNumber]);
+    socket.emit("get_result", playerCount, numSwap[answerNumber]);
 }
 
 socket.on("receive_result", (answerStatus, explanation) => {
