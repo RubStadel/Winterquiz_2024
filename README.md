@@ -31,12 +31,13 @@ Die Website wird durch Node.js (Express) bereitgestellt, Kommunikation läuft ü
   * [ ] Einfügen eines Username-Formulars in/nach der Startseite
   * [ ] Herausfinden, wie man mit JS die IP-Adresse ausliest und das implementieren
 * [x] Implementierung der Fragenkarten-Flipanimation  
-    -> [ ] Entscheiden, wo die Erklärung der Antwort angezeigt wird  
-    (Statt Frage? Statt Antworten? Auf Rückseite der Fragekarte?)
+  * [x] Entscheiden, wo die Erklärung der Antwort angezeigt wird  
+    -> Statt Frage ~~Statt Antworten? Auf Rückseite der Fragekarte?~~
 * [ ] Implementierung der Eiskristall-Animation
 * [x] Entscheiden, ob Rausch-Effekt verwendet werden soll  
     -> ja, mindestens für Haupt-Hintergrund
-* [ ] Entscheiden, ob zwei verschiedene Schriftgrößen für kurze/lange(mehrzeilige) Antwortmöglichkeiten existieren sollen
+* [x] Entscheiden, ob zwei verschiedene Schriftgrößen für kurze/lange(mehrzeilige) Antwortmöglichkeiten existieren sollen (genauso bei Erklärungen)
+  * [ ] Implementierung der verschiedenen SChriftgrößen (mithilfe der Länge der Anwtirten/Erklärungen)
 
 ### Backend
 
