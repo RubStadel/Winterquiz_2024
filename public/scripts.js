@@ -91,7 +91,6 @@ socket.on("receive_result", (answerStatus, explanation) => {
 
 socket.on("receive_scores", (scores) => {
     // returns array of objects with attributes "name" and "score"
-
     // sort by score descending
     scores.sort((a, b) => b.score - a.score);
     // following 2 lines is functional pseudocode

@@ -49,10 +49,15 @@ class Player {
         this.unusedQuestions = Array.from({length: 8}, (_, index) => index);
         this.currNum;   	// current number, refers to moderator
 		this.points = 0;	// highscore points
+		this.paused = false;// variable to keep record of leaving
 	}
 	// calculate new current number
-	newCurrNum(){
-        if (this.unusedQuestions){
+	newCurrNum(paused){
+		if (this.paused){
+			this.paused = false;
+			return this.currNum;
+		}
+        else if (this.unusedQuestions){
             // get random number of remaining unusedQuestions array
             let randNum = Math.floor(Math.random() * this.unusedQuestions.length);
             // delete the random number out of array and update array
@@ -113,6 +118,7 @@ io.on("connection", (socket) => {
 				moderator[t].question,
 				answerArr
 			);
+			playerArr[PC].paused = true;
 		}
 		else{
 			socket.emit("receive_question", 
@@ -131,7 +137,7 @@ io.on("connection", (socket) => {
         .then(() => {
             console.log("question and answer logged anonymously");
         });
-
+		playerArr[PC].paused = false;
 		let tempBool = false;
 		if (ans == 0){
 			playerArr[PC].points++;
@@ -144,6 +150,11 @@ io.on("connection", (socket) => {
 		if (!playerArr[PC].unusedQuestions){
 			updateScore();
 		}
+	});
+
+	socket.on("get_test", (test) => {
+		// testsocket to see something from script.js
+		console.log(test);
 	});
 	
 });
