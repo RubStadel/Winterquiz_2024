@@ -7,6 +7,10 @@ const { Server } = require("socket.io");
 const io = new Server(server);
 const csv = require("csv-parser")				// Package csv-parser
 const fs = require("fs");						// Package fs (Filestring)
+const usedIPs = [];								// array to keep track of used IPs
+// name of array is moderator because it contains all questions, answers and explanations
+// id´s: question, answer0, answer1, answer2, answer3, explanation
+const moderator = [];
 
 
 // init csv-writer to log into csv
@@ -32,13 +36,10 @@ const writeScore = createCsvWriter({
 
 let playerCount = 0;	// counts the playerobjects
 let playerArr = [];		// array to fill with playerobjects
-// name of array is moderator because it contains all questions, answers and explanations
-// id´s: question, answer0, answer1, answer2, answer3, explanation
-const moderator = [];
 let scores = [];		// array to fill with usernames and scores
-// array to keep track of used IPs
-// name? usedIParr, usedIpArr?
-const usedIPs = [];
+let loadCheck = false;  // bool to switch if loading the scores.csv is complete
+
+
 
 // class, for each player one object
 class Player {
@@ -152,34 +153,30 @@ io.on("connection", (socket) => {
 		}
 	});
 
-	socket.on("get_test", (test) => {
+	socket.on("get_test", (PC, test) => {
 		// testsocket to see something from script.js
 		console.log(test);
+		updateScore(PC);
+
+		socket.emit("receive_scores", scores);
+	});
+	socket.on("get_test2", (PC, test2) => {
+		// testsocket to see something from script.js
+		console.log(String(test2));
 	});
 	
 });
-function updateScore(){
-	const score_entry = [{
+function updateScore(PC){
+	const scoreEntry = [{
 		name: playerArr[PC].playerName, 
-		score: playerArr[PC].score
+		score: playerArr[PC].points
 	}];
 
-	let updatePromise = new Promise(function(myResolve) {
-		csvWriter.writeRecords(score_entry)       // returns a promise
-		.pipe(csv({separator: ","}))
-
-		// This will push the object row into the array
-		.on("data", function (row) {scores.push(row)})
-
-		.on("end", function () {
-			myResolve();
-		});
-	})
-	updatePromise.then(
-		function() {
-			console.log("score.csv updated");
-		},
-	);
+	writeScore.writeRecords(scoreEntry)       // returns a promise
+        .then(() => {
+            console.log("updated score");
+			// loadScore();
+        });
 };
 
 function loadScore(){
@@ -194,16 +191,17 @@ function loadScore(){
 
 		.on("end", function () {
 			myResolve();
+			// console.log("load fertig");
+			// loadCheck = true;
 		});
 	})
 	loadPromise.then(
 		function() {
-			socket.emit("receive_scores", scores);
+			console.log("load fertig");
+			// loadCheck = true;
 		},
 	)
 };
-;
-
 
 /// start listening on the designated port
 server.listen(3000, () => {											// start server and choose port (here: 3000)

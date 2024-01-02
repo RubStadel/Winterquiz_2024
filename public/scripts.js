@@ -30,6 +30,7 @@ socket.on("receive_playernum", (PC) => {
 });
 
 socket.on("receive_question", (questStr, answerArray) => {
+    // socket.emit("get_test",playerCount,"update");
     if (questStr) {
         // question as string and answers as array is given
         // each answer in the array is a string
@@ -53,6 +54,7 @@ socket.on("receive_question", (questStr, answerArray) => {
         isConcurrentQuestion++;
     } else {
         // if questStr==0, client must wait for the scores to be sent
+        // score will be sent to socket "receive_scores"
     }
     
 });
@@ -96,6 +98,7 @@ socket.on("receive_scores", (scores) => {
     // following 2 lines is functional pseudocode
     let bestPlayer = scores[0].name;
     let scoreOfBestPlayer = scores[0].score;
+    // socket.emit("get_test2",bestPlayer);
 });
 
 /// function to randomize answer order
