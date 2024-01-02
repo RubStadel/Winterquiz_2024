@@ -53,7 +53,11 @@ Die Website wird durch Node.js (Express) bereitgestellt, Kommunikation läuft ü
 
 ## Inbetriebnahme
 
-### Benötigte Pakete
+### Benötigte Programme
+
+* Node.js: https://nodejs.org/en/download
+
+### Benötigte Pakete installierbar über Eingabeaufforderung
 
 * `npm install express@4`
 * `npm install socket.io`
