@@ -59,7 +59,7 @@ class Player {
             this.currNum = this.unusedQuestions.splice(randNum, 1);
             return this.currNum;
         }
-        // else return 8;	// 8 is impossible to get as a current number (0-7)
+        else return 8;	// 8 is impossible to get as a current number (0-7)
     }
 }
 
@@ -102,16 +102,24 @@ io.on("connection", (socket) => {
 	socket.on("get_question", (PC) => {
 		// temporary variable
 		let t = playerArr[PC].newCurrNum();
-		let answerArr = [        
-			moderator[t].answer0,
-        	moderator[t].answer1,
-        	moderator[t].answer2,
-        	moderator[t].answer3
-		];
-		socket.emit("receive_question", 
-			moderator[t].question,
-			answerArr
-		);
+		if (t!=8){
+			let answerArr = [        
+				moderator[t].answer0,
+				moderator[t].answer1,
+				moderator[t].answer2,
+				moderator[t].answer3
+			];
+			socket.emit("receive_question", 
+				moderator[t].question,
+				answerArr
+			);
+		}
+		else{
+			socket.emit("receive_question", 
+				0,
+				0
+			);
+		};
 	});
 
 	// ans(wer) must be in [0,1,2,3], 0 is the right answer
@@ -134,37 +142,55 @@ io.on("connection", (socket) => {
 			moderator[playerArr[PC].currNum].explanation
 		);
 		if (!playerArr[PC].unusedQuestions){
-			const score_entry = [{
-				name: playerArr[PC].playerName, 
-				score: playerArr[PC].score
-			}];
-        
-        	csvWriter.writeRecords(score_entry)       // returns a promise
-        	.then(() => {
-            	console.log("score logged");
-        	});
-			scores = [];
-			// Promise of the asynchronous file string
-			let myPromise = new Promise(function(myResolve) {
-				fs.createReadStream("scores.csv")
-				.pipe(csv({separator: ","}))
-
-				// This will push the object row into the array
-				.on("data", function (row) {scores.push(row)})
-
-				.on("end", function () {
-					myResolve();
-				});
-			});
-			myPromise.then(
-				function() {
-					socket.emit("receive_scores", scores);
-				},
-			);
+			updateScore();
 		}
 	});
 	
 });
+function updateScore(){
+	const score_entry = [{
+		name: playerArr[PC].playerName, 
+		score: playerArr[PC].score
+	}];
+
+	let updatePromise = new Promise(function(myResolve) {
+		csvWriter.writeRecords(score_entry)       // returns a promise
+		.pipe(csv({separator: ","}))
+
+		// This will push the object row into the array
+		.on("data", function (row) {scores.push(row)})
+
+		.on("end", function () {
+			myResolve();
+		});
+	})
+};
+updatePromise.then(
+	function() {
+		console.log("score.csv updated");
+	},
+);
+
+function loadScore(){
+	// Promise of the asynchronous file string
+	scores = [];
+	let loadPromise = new Promise(function(myResolve) {
+		fs.createReadStream("scores.csv")
+		.pipe(csv({separator: ","}))
+
+		// This will push the object row into the array
+		.on("data", function (row) {scores.push(row)})
+
+		.on("end", function () {
+			myResolve();
+		});
+	})
+};
+loadPromise.then(
+	function() {
+		socket.emit("receive_scores", scores);
+	},
+);
 
 
 /// start listening on the designated port

@@ -28,26 +28,32 @@ socket.on("receive_playernum", (PC) => {
 });
 
 socket.on("receive_question", (questStr, answerArray) => {
-    // question as string and answers as array is given
-    // each answer in the array is a string
-    let currentQuestion = questStr;
-    answerArr = answerArray;
-    shuffleAnswers();
+    if (questStr)
+    {
+        // question as string and answers as array is given
+        // each answer in the array is a string
+        let currentQuestion = questStr;
+        answerArr = answerArray;
+        shuffleAnswers();
 
-    document.getElementById("question").textContent = currentQuestion;
+        document.getElementById("question").textContent = currentQuestion;
 
-    for (let i = 0; i < 4; i++) {
-        let tmpButton = document.getElementById(`answer${i}`);
-        tmpButton.textContent = shuffledAnswers[i];
-        tmpButton.style.backgroundColor = "#0f7a334e";
-        tmpButton.style.color = "#585858";
+        for (let i = 0; i < 4; i++) {
+            let tmpButton = document.getElementById(`answer${i}`);
+            tmpButton.textContent = shuffledAnswers[i];
+            tmpButton.style.backgroundColor = "#0f7a334e";
+            tmpButton.style.color = "#585858";
+        }
+        notAnsweredYet = true;
+
+        if (isConcurrentQuestion) {         
+            flipQuestionCard();
+        }
+        isConcurrentQuestion++;
     }
-    notAnsweredYet = true;
-
-    if (isConcurrentQuestion) {         
-        flipQuestionCard();
+    else{
+        // if questStr==0, client must wait for the scores to be sent
     }
-    isConcurrentQuestion++;
     
 });
 
