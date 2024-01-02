@@ -57,7 +57,7 @@ class Player {
 			this.paused = false;
 			return this.currNum;
 		}
-        else if (this.unusedQuestions){
+        else if (this.unusedQuestions.length){
             // get random number of remaining unusedQuestions array
             let randNum = Math.floor(Math.random() * this.unusedQuestions.length);
             // delete the random number out of array and update array
