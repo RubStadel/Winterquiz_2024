@@ -10,7 +10,9 @@ let numSwap = [];                           // when answers are shuffled, this a
 let pressedButtonId;
 let isConcurrentQuestion = 0;
 let flipToggle = true;
+let flipTimes = 0;
 let notAnsweredYet = true;
+let shakeInterval;
 
 /// functions controlling game flow
 
@@ -28,8 +30,7 @@ socket.on("receive_playernum", (PC) => {
 });
 
 socket.on("receive_question", (questStr, answerArray) => {
-    if (questStr)
-    {
+    if (questStr) {
         // question as string and answers as array is given
         // each answer in the array is a string
         let currentQuestion = questStr;
@@ -50,8 +51,7 @@ socket.on("receive_question", (questStr, answerArray) => {
             flipQuestionCard();
         }
         isConcurrentQuestion++;
-    }
-    else{
+    } else {
         // if questStr==0, client must wait for the scores to be sent
     }
     
@@ -85,6 +85,8 @@ socket.on("receive_result", (answerStatus, explanation) => {
     // console.log("currExplanation.length: ", currExplanation.length);
 
     document.getElementById("flip-card-inner").onclick = flipQuestionCard;
+
+    shakeInterval = setInterval(shakeQuestionCard, 6000);
 });
 
 socket.on("receive_scores", (scores) => {
@@ -120,7 +122,8 @@ function shuffleAnswers(){
 function flipQuestionCard() {
     let card = document.getElementById("flip-card-inner");
 
-    card.style.transform = `rotateY(${+card.style.transform.slice(8, -4) + 180}deg)`;
+    flipTimes++;
+    card.style.transform = `rotateY(${flipTimes * 180}deg)`;
 
     if (flipToggle) {
         for (let i = 0; i < 4; i++) {
@@ -140,4 +143,27 @@ function flipQuestionCard() {
     flipToggle = !flipToggle;
 
     card.onclick = {};
+    clearInterval(shakeInterval);
+}
+
+function shakeQuestionCard() {
+    let card = document.getElementById("flip-card-inner");
+
+    card.style.transitionDuration = "0.17s";
+
+    card.style.transform = "rotate(20deg)";
+    setTimeout(() => {
+        card.style.transform = "rotate(-20deg)";
+    }, 180);
+    setTimeout(() => {
+        card.style.transform = "rotate(20deg)";
+    }, 360);
+    setTimeout(() => {
+        card.style.transform = "rotate(-20deg)";
+    }, 540);
+    setTimeout(() => {
+        card.style.transform = "rotate(0deg)";
+    }, 720);
+    
+    card.style.transitionDuration = "0.8s";
 }

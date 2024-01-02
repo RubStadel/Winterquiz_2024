@@ -55,7 +55,7 @@ Die Website wird durch Node.js (Express) bereitgestellt, Kommunikation läuft ü
 
 ### Benötigte Programme
 
-* Node.js: https://nodejs.org/en/download
+* Node.js: [download site](https://nodejs.org/en/download "Node.js downloads")
 
 ### Benötigte Pakete installierbar über Eingabeaufforderung
 

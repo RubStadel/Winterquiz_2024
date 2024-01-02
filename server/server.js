@@ -164,12 +164,12 @@ function updateScore(){
 			myResolve();
 		});
 	})
+	updatePromise.then(
+		function() {
+			console.log("score.csv updated");
+		},
+	);
 };
-updatePromise.then(
-	function() {
-		console.log("score.csv updated");
-	},
-);
 
 function loadScore(){
 	// Promise of the asynchronous file string
@@ -185,12 +185,13 @@ function loadScore(){
 			myResolve();
 		});
 	})
+	loadPromise.then(
+		function() {
+			socket.emit("receive_scores", scores);
+		},
+	)
 };
-loadPromise.then(
-	function() {
-		socket.emit("receive_scores", scores);
-	},
-);
+;
 
 
 /// start listening on the designated port
