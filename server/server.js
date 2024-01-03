@@ -67,7 +67,8 @@ class Player {
 }
 
 // read the csv and fill moderator (fs is always async)
-fs.createReadStream("moderator.csv")
+// fs.createReadStream("moderator.csv")
+fs.createReadStream("mock.csv")
 	.pipe(csv({separator: ";"}))
 
 	// This will push the object row into the array
