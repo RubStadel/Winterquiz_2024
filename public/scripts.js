@@ -2,7 +2,7 @@
 
 let socket = io();                          // starting the socket connection using socket.io library
 let playerName = "Herbert";                 // placeholder // username given by the player
-let ip = "192.168.1.125";                   // placeholder // some sort of IP-address of the player
+let ip;                                     // some sort of IP-address of the player
 let playerCount;                            // PlayerCount (PC) (to differentiate between players)
 let answerArr = [];                         // array of objects of the answers
 let shuffledAnswers = [];                   //array of shuffled answers
@@ -12,7 +12,29 @@ let isConcurrentQuestion = 0;
 let flipToggle = true;
 let flipTimes = 0;
 let notAnsweredYet = true;
-let shakeInterval;
+
+/// function to get temporary IPv6 address of the client
+
+// Achtung: Diese Funktion gibt drei IP-ADressen in 'res' zurück (kommentier' Zeilen 36 & 37 ein, um es zu sehen), aber nur eine IPv6-Adresse. Diese ist die längste und wird über ihre Länge gesucht. 
+// Wenn du das optimieren kannst, tu das gerne. Ich finde das Suchen nicht schön, bin aber bereit, es so zu lassen :)
+
+getIPs().then(res => {
+    let ipv6;
+    for (let i = 0; i < res.length; i++) {
+        if (!i) {
+            ipv6 = res[i];
+        } else {
+            if (res[i].length > res[i - 1].length) {
+                ipv6 = res[i];
+            }
+        }
+    }
+    ip = ipv6;
+    console.log(ipv6);
+    document.getElementById("startButton").textContent = ipv6;
+    // console.log(res.join('\n'));
+    // document.getElementById("startButton").textContent = res;
+});
 
 /// functions controlling game flow
 
@@ -39,6 +61,9 @@ socket.on("receive_question", (questStr, answerArray) => {
         shuffleAnswers();
 
         document.getElementById("question").textContent = currentQuestion;
+        document.getElementById("question").style.fontSize = "3.25vh";
+
+        document.getElementById("continueButton").style.opacity = "0";
 
         for (let i = 0; i < 4; i++) {
             let tmpButton = document.getElementById(`answer${i}`);
@@ -82,16 +107,16 @@ socket.on("receive_result", (answerStatus, explanation) => {
         document.getElementById(pressedButtonId).style.color = "white";
     }
 
-    document.getElementById("question").textContent = currExplanation;
-    document.getElementById("question").style.fontSize = "2.25vh";                                      // reicht für die längste Erklärung, aber für kurze ist es eig. zu klein
+    document.getElementById("question").textContent = currExplanation + "\r\n\r\n";
+    // document.getElementById("question").textContent = currExplanation;
+    document.getElementById("question").style.fontSize = "2vh";                                      // reicht für die längste Erklärung, aber für kurze ist es eig. zu klein
     // console.log("currExplanation.length: ", currExplanation.length);
 
-    document.getElementById("flip-card-inner").onclick = flipQuestionCard;
+    document.getElementById("continueButton").onclick = flipQuestionCard;
 
     setTimeout(() => {
-        shakeQuestionCard();
-        shakeInterval = setInterval(shakeQuestionCard, 6000);
-    }, 2000);
+        document.getElementById("continueButton").style.opacity = "1";
+      }, 400);
 });
 
 socket.on("receive_scores", (scores) => {
@@ -148,28 +173,5 @@ function flipQuestionCard() {
     }
     flipToggle = !flipToggle;
 
-    card.onclick = {};
-    clearInterval(shakeInterval);
-}
-
-function shakeQuestionCard() {
-    let card = document.getElementById("flip-card-inner");
-
-    card.style.transitionDuration = "0.17s";
-
-    card.style.transform = "rotate(20deg)";
-    setTimeout(() => {
-        card.style.transform = "rotate(-20deg)";
-    }, 180);
-    setTimeout(() => {
-        card.style.transform = "rotate(20deg)";
-    }, 360);
-    setTimeout(() => {
-        card.style.transform = "rotate(-20deg)";
-    }, 540);
-    setTimeout(() => {
-        card.style.transform = "rotate(0deg)";
-    }, 720);
-    
-    card.style.transitionDuration = "0.8s";
+    document.getElementById("continueButton").onclick = {};
 }

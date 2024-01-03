@@ -88,6 +88,7 @@ io.on("connection", (socket) => {
 		// every playerobject has a playerCount to differentiate
 		if (!usedIPs.includes(IP)){
 			playerArr[playerCount] = new Player(playerName, IP);
+			// console.log("IP: ", IP);
 			socket.emit("receive_playernum", playerCount);
 			usedIPs[playerCount] = IP;
 			playerCount++;

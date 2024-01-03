@@ -65,6 +65,7 @@ button:hover {
     background-color: rgba(150, 150, 150, 0.25);
     overflow: hidden;
     transition: 0.2s ease-out;
+    -webkit-backdrop-filter: blur(2.5vh);
     backdrop-filter: blur(2.5vh);
     text-shadow: 0 0 0.15rem black;
 }
@@ -141,17 +142,7 @@ button:hover {
     justify-content: center;
     border-radius: 3rem;
     background-color: white;
-}
-
-.invertedButtonColors {
-    background-color: transparent;
-    color: black;
-    border: 2px solid black;
-}
-
-.invertedButtonColors:hover {
-    color: white;
-    background-color: black;
+    z-index: 2;
 }
 
 .column {
@@ -171,6 +162,7 @@ button:hover {
 }
 
 .fourAnswers {
+    white-space: pre-line;
     width: 40vw;
     height: 20vh;
     margin: 1vh 3vw;
@@ -186,25 +178,6 @@ button:hover {
     outline-offset: -0.4rem;
 }
 
-.manyAnswers {
-    width: 90vw;
-    height: 6.75vh;
-    font-size: 3.75vh;
-    border-radius: 2rem;
-    background-color: transparent;
-}
-
-.manyAnswers:hover {
-    border: 0.3rem solid #0f7a3386;
-}
-
-#landingTextField {
-    height: 35vh;
-    padding: 0 11vw;
-    text-align: justify;
-    font-size: 3vh;
-}
-
 #gameInstructions {
     width: 80vw;
     height: 65vh;
@@ -218,13 +191,8 @@ button:hover {
     width: 75vw;
 }
 
-#questionRow {
-    min-height: 40vh;
-    max-height: 40vh;
-    margin: 1.5vh 0;
-}
-
 #question {
+    white-space: pre-line;
     padding: 0 2vw;
     height: 100%;
     color: white;
@@ -236,15 +204,30 @@ button:hover {
     justify-content: center;
 }
 
+#continueButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    right: 2vw;
+    bottom: 0.8vh;
+    z-index: 1;
+    font-size: 6vh;
+    height: 5.5vh;
+    width: 12vw;
+    opacity: 0;
+    transition: opacity 0.5s ease-in;
+}
+
+#continueButton:hover {
+    background-color: white;
+    border: none;
+}
+
 #answersCol {
     height: 40vh;
     flex-flow: wrap;
     align-content: center;
     justify-content: center;
     margin: 2vh 0;
-}
-
-#submitRow {
-    min-height: 12.5vh;
-    max-height: 12.5vh;
 }
