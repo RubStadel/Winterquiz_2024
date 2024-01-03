@@ -8,7 +8,7 @@
 import segno
 
 # Create open url
-qrOpenURL = segno.make_qr("http://192.168.1.123/")
+qrOpenURL = segno.make_qr("http://141.64.203.44:3000/")
 
 # Save in an "artistic" way
 qrOpenURL.to_artistic(background="Snowflake.png", 

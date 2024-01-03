@@ -67,7 +67,8 @@ class Player {
 }
 
 // read the csv and fill moderator (fs is always async)
-fs.createReadStream("moderator.csv")
+// fs.createReadStream("moderator.csv")
+fs.createReadStream("mock.csv")
 	.pipe(csv({separator: ";"}))
 
 	// This will push the object row into the array
@@ -103,7 +104,7 @@ io.on("connection", (socket) => {
 
 	// PC for playerCount as argument
 	// pc for playerCount as id in object of playerArray
-	socket.on("get_question", (PC) => {
+	socket.on("get_question", async (PC) => {
 		// temporary variable
 		let t = playerArr[PC].newCurrNum();
 		if (t!=8){
@@ -119,12 +120,10 @@ io.on("connection", (socket) => {
 			);
 			playerArr[PC].paused = true;
 		}
-		// else{
-		// 	socket.emit("receive_question", 
-		// 		0,
-		// 		0
-		// 	);
-		// };
+		else{
+			await loadScore(socket);
+			socket.emit("receive_scores", scores);
+		};
 	});
 
 	// ans(wer) must be in [0,1,2,3], 0 is the right answer
