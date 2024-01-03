@@ -88,17 +88,21 @@ socket.on("receive_result", (answerStatus, explanation) => {
 
     document.getElementById("flip-card-inner").onclick = flipQuestionCard;
 
-    shakeInterval = setInterval(shakeQuestionCard, 6000);
+    setTimeout(() => {
+        shakeQuestionCard();
+        shakeInterval = setInterval(shakeQuestionCard, 6000);
+    }, 2000);
 });
 
 socket.on("receive_scores", (scores) => {
     // returns array of objects with attributes "name" and "score"
-    // sort by score descending
+    // sort by score descending    
+    console.log(scores);
     scores.sort((a, b) => b.score - a.score);
     // following 2 lines is functional pseudocode
-    let bestPlayer = scores[0].name;
+    let bestPlayer = scores[0].NAME;
     let scoreOfBestPlayer = scores[0].score;
-    // socket.emit("get_test2",bestPlayer);
+    console.log(bestPlayer);
 });
 
 /// function to randomize answer order

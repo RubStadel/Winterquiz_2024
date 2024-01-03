@@ -37,9 +37,6 @@ const writeScore = createCsvWriter({
 let playerCount = 0;	// counts the playerobjects
 let playerArr = [];		// array to fill with playerobjects
 let scores = [];		// array to fill with usernames and scores
-let loadCheck = false;  // bool to switch if loading the scores.csv is complete
-
-
 
 // class, for each player one object
 class Player {
@@ -121,16 +118,16 @@ io.on("connection", (socket) => {
 			);
 			playerArr[PC].paused = true;
 		}
-		else{
-			socket.emit("receive_question", 
-				0,
-				0
-			);
-		};
+		// else{
+		// 	socket.emit("receive_question", 
+		// 		0,
+		// 		0
+		// 	);
+		// };
 	});
 
 	// ans(wer) must be in [0,1,2,3], 0 is the right answer
-	socket.on("get_result", (PC, ans) => {
+	socket.on("get_result", async (PC, ans) => {
 		// log anonymously
 		const logAnon = [{question: playerArr[PC].currNum, answer: ans}];
         
@@ -148,8 +145,10 @@ io.on("connection", (socket) => {
 			tempBool,
 			moderator[playerArr[PC].currNum].explanation
 		);
-		if (!playerArr[PC].unusedQuestions){
-			updateScore();
+		if (!playerArr[PC].unusedQuestions.length){
+			await updateScore(PC);
+			await loadScore(socket);
+			socket.emit("receive_scores", scores);
 		}
 	});
 
@@ -160,13 +159,9 @@ io.on("connection", (socket) => {
 
 		socket.emit("receive_scores", scores);
 	});
-	socket.on("get_test2", (PC, test2) => {
-		// testsocket to see something from script.js
-		console.log(String(test2));
-	});
 	
 });
-function updateScore(PC){
+async function updateScore(PC){
 	const scoreEntry = [{
 		name: playerArr[PC].playerName, 
 		score: playerArr[PC].points
@@ -174,33 +169,27 @@ function updateScore(PC){
 
 	writeScore.writeRecords(scoreEntry)       // returns a promise
         .then(() => {
-            console.log("updated score");
+            // console.log("updated score");
 			// loadScore();
         });
 };
 
-function loadScore(){
+async function loadScore(socket){
 	// Promise of the asynchronous file string
 	scores = [];
-	let loadPromise = new Promise(function(myResolve) {
-		fs.createReadStream("scores.csv")
-		.pipe(csv({separator: ","}))
+	fs.createReadStream("scores.csv")
+    .pipe(csv({separator: ","}))
 
-		// This will push the object row into the array
-		.on("data", function (row) {scores.push(row)})
+    // This will push the object row into the array
+    .on("data", function (row) {scores.push(row)})
 
-		.on("end", function () {
-			myResolve();
-			// console.log("load fertig");
-			// loadCheck = true;
-		});
-	})
-	loadPromise.then(
-		function() {
-			console.log("load fertig");
-			// loadCheck = true;
-		},
-	)
+    .on("end", function () {
+        // myResolve();
+        // console.log("load fertig");
+        // console.log("scores: ", scores);
+		socket.emit("receive_scores", scores);
+		// loadCheck = true;
+    });
 };
 
 /// start listening on the designated port
