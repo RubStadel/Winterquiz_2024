@@ -48,6 +48,7 @@ class Player {
         this.currNum;   	// current number, refers to moderator
 		this.points = 0;	// highscore points
 		this.paused = false;// variable to keep record of leaving
+		this.resultArr = []	// array with answered questions as objects
 	}
 	// calculate new current number
 	newCurrNum(paused){
@@ -121,8 +122,8 @@ io.on("connection", (socket) => {
 			playerArr[PC].paused = true;
 		}
 		else{
-			await loadScore(socket);
-			socket.emit("receive_scores", scores);
+			await loadScore(socket); // loadScore already emits scores
+			// socket.emit("receive_scores", scores);
 		};
 	});
 
@@ -135,6 +136,7 @@ io.on("connection", (socket) => {
         .then(() => {
             console.log("question and answer logged anonymously");
         });
+		playerArr[PC].resultArr[playerArr[PC].currNum] = logAnon[0];
 		playerArr[PC].paused = false;
 		let tempBool = false;
 		if (ans == 0){
@@ -147,17 +149,21 @@ io.on("connection", (socket) => {
 		);
 		if (!playerArr[PC].unusedQuestions.length){
 			await updateScore(PC);
-			await loadScore(socket);
-			socket.emit("receive_scores", scores);
+			await loadScore(socket);	// loadScore already emits scores
+			// socket.emit("receive_scores", scores);
 		}
+	});
+
+	socket.on("get_resultArr", (PC) => {
+		socket.emit("receive_resultArr", playerArr[PC].resultArr);
 	});
 
 	socket.on("get_test", (PC, test) => {
 		// testsocket to see something from script.js
-		console.log(test);
-		updateScore(PC);
+		// console.log(test);
+		// updateScore(PC);
 
-		socket.emit("receive_scores", scores);
+		// socket.emit("receive_scores", scores);
 	});
 	
 });
