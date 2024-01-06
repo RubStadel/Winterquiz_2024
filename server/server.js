@@ -132,10 +132,11 @@ io.on("connection", (socket) => {
 		// log anonymously
 		const logAnon = [{question: playerArr[PC].currNum, answer: ans}];
         
-        writeAnswersAnon.writeRecords(logAnon)       // returns a promise
-        .then(() => {
-            console.log("question and answer logged anonymously");
-        });
+        // writeAnswersAnon.writeRecords(logAnon)       // returns a promise
+        // .then(() => {
+        //     // console.log("question and answer logged anonymously");
+        // });
+		await writeAnswersAnon.writeRecords(logAnon)       // returns a promise
 		playerArr[PC].resultArr[playerArr[PC].currNum] = logAnon[0];
 		playerArr[PC].paused = false;
 		let tempBool = false;

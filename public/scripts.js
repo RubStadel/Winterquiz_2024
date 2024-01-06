@@ -1,11 +1,11 @@
 "use strict";
 
 let socket = io();                          // starting the socket connection using socket.io library
-let playerName = "Herbert";                 // placeholder // username given by the player
+let playerName = "Anon";                    // placeholder // username given by the player
 let ip;                                     // some sort of IPv6-address of the player
 let playerCount;                            // PlayerCount (PC) (to differentiate between players)
 let answerArr = [];                         // array of objects of the answers
-let shuffledAnswers = [];                   //array of shuffled answers
+let shuffledAnswers = [];                   // array of shuffled answers
 let numSwap = [];                           // when answers are shuffled, this array keeps track
 let pressedButtonId;
 let isConcurrentQuestion = 0;
@@ -13,28 +13,26 @@ let flipToggle = true;
 let flipTimes = 0;
 let notAnsweredYet = true;
 
-/// function to get temporary IPv6 address of the client
-
-// Achtung: Diese Funktion gibt drei IP-ADressen in 'res' zurück (kommentier' Zeilen 27 & 28 ein, um es zu sehen), aber nur eine IPv6-Adresse. Diese ist die längste und wird über ihre Länge gesucht. 
-
-getIPs().then(res => {
-    // sorting array in order of length descending
-    res.sort((a, b) => b.length - a.length);
-    ip = res[0];
-
-    console.log(ip);
-    document.getElementById("startButton").textContent = ip;
-    // console.log(res.join('\n'));
-    // document.getElementById("startButton").textContent = res;
-});
-
 /// functions controlling game flow
 
 function startGame() {
     document.getElementById("landingNav").style.height = "0%";
-    // get first question and its answers from server and display them
-    // Pseudo: player has to enter a username and javascript has to get IP
-    socket.emit("start", playerName, ip);
+    /// function to get temporary IPv6 address of the client
+    // Achtung: Diese Funktion gibt drei IP-ADressen in 'res' zurück aber nur eine IPv6-Adresse. Diese ist die längste und wird über ihre Länge gesucht. 
+
+    getIPs().then(res => {
+        // sorting array in order of length descending
+        res.sort((a, b) => b.length - a.length);
+        ip = res[0];
+
+        // get first question and its answers from server and display them
+        socket.emit("start", playerName, ip);
+
+        // console.log(ip);
+        // document.getElementById("startButton").textContent = ip;
+        // console.log(res.join('\n'));
+        // document.getElementById("startButton").textContent = res;
+    }); 
 }
 
 socket.on("receive_playernum", (PC) => {
