@@ -28,7 +28,7 @@ Die Website wird durch Node.js (Express) bereitgestellt, Kommunikation läuft ü
 * [x] Erstellen der Startseite, die Informationen über das Quiz enthält
 * [ ] Erstellen der Ergebnisseite, die die finale Punktzahl anzeigt
 * [ ] Implementierung des Spielflusses  
-  * [ ] Einfügen eines Username-Formulars in/nach der Startseite
+  * [x] Einfügen eines Username-Formulars in/nach der Startseite
   * [x] Herausfinden, wie man mit JS die IP-Adresse ausliest und das implementieren  
     -> Temporäre IPv6-Adresse bleibt (bei meinem) Handy (standardmäßig) >= 3 Stunden erhlten und ändert sich weder bei Netzwerkwechsel noch Serverneustart
 * [x] Implementierung der Fragenkarten-Flipanimation  
@@ -38,7 +38,7 @@ Die Website wird durch Node.js (Express) bereitgestellt, Kommunikation läuft ü
 * [x] Entscheiden, ob Rausch-Effekt verwendet werden soll  
     -> ja, mindestens für Haupt-Hintergrund
 * [x] Entscheiden, ob zwei verschiedene Schriftgrößen für kurze/lange(mehrzeilige) Antwortmöglichkeiten existieren sollen (genauso bei Erklärungen)
-  * [ ] Implementierung der verschiedenen Schriftgrößen (mithilfe der Länge der Anwtirten/Erklärungen)
+  * [x] Implementierung der verschiedenen Schriftgrößen (mithilfe der Länge der Anwtorten/Erklärungen)
 
 ### Backend
 

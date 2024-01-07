@@ -1,15 +1,35 @@
+:root {
+    /* colors */
+    --light-gray: #8C8C8C;
+    --dark-gray: #585858;
+    --overlay-blur-gray: #96969640;
+    --weak-green: #0f7a334e;
+    --strong-green: #0f7a3386;
+    --correct-answer-green: #0f7a33bf;
+    --wrong-answer-red: #d74b6ca3;
+
+    /* font sizes */
+    --answer-small: 2.25vh;
+    --answer-big: 3vh;
+    --question-small: 2vh;
+    --question-big: 3.25vh;
+}
+
 body {
     height: 100%;
     margin: 0px;
     display: flex;
     justify-content: center;
-      background-image: radial-gradient(circle at 25% 100%, #CCE4E2 0%, #b3fffa 55%, #d74b6c 110%);
+    background-image: radial-gradient(circle at 25% 100%, #CCE4E2 0%, #b3fffa 55%, #d74b6c 110%);
     font-family: 'Marko One', sans-serif;
     overflow: hidden;
     /* disable selection */
-    -webkit-user-select: none; /* Safari */
-    -ms-user-select: none; /* IE 10 and IE 11 */
-    user-select: none; /* Standard syntax */
+    -webkit-user-select: none;
+    /* Safari */
+    -ms-user-select: none;
+    /* IE 10 and IE 11 */
+    user-select: none;
+    /* Standard syntax */
 }
 
 body::before,
@@ -27,14 +47,14 @@ body::after {
 
 /* grainy filter */
 body::before {
-    background: #8C8C8C;
+    background: var(--light-gray);
     filter: url(#noiseFilter);
 }
 
 div {
     font-size: 6vh;
     font-weight: 500;
-    color: #585858;
+    color: var(--dark-gray);
 }
 
 button {
@@ -43,9 +63,9 @@ button {
     height: 7vh;
     padding: 0.25rem 0.75rem;
     margin: 0.25rem;
-    border-radius: 5rem;
+    border-radius: 4.5vh;
     outline: none;
-    color: #585858;
+    color: var(--dark-gray);
     background: white;
     font-size: 4.25vh;
 }
@@ -55,6 +75,49 @@ button:hover {
     border: 0.5rem solid white;
 }
 
+form {
+    opacity: 0;
+    transition: opacity 0.4s;
+    width: 80vw;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    position: absolute;
+    bottom: 50vh;
+}
+
+form>button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 6vh;
+    height: 7.5vh;
+    width: 12vw;
+}
+
+form>button:hover {
+    background-color: white;
+    border: none;
+    color: black;
+}
+
+input {
+    font-family: 'Marko One', sans-serif;
+    color: var(--dark-gray);
+    display: flex;
+    text-align: center;
+    border: none;
+    font-size: 3.5vh;
+    border-radius: 3.5vh;
+    width: 62.5vw;
+    height: 7.5vh;
+}
+
+input:focus {
+    outline: 0.3vh solid var(--dark-gray);
+}
+
 .overlay {
     height: 100%;
     width: 100%;
@@ -62,9 +125,9 @@ button:hover {
     z-index: 2;
     left: 0;
     top: 0;
-    background-color: rgba(150, 150, 150, 0.25);
+    background-color: var(--overlay-blur-gray);
     overflow: hidden;
-    transition: 0.2s ease-out;
+    transition: 0.55s ease-in;
     -webkit-backdrop-filter: blur(2.5vh);
     backdrop-filter: blur(2.5vh);
     text-shadow: 0 0 0.15rem black;
@@ -102,7 +165,7 @@ button:hover {
     top: -2vh;
     right: 5vw;
     font-size: 5rem;
-    color: #585858;
+    color: var(--dark-gray);
     display: none;
     transition: 0.4s;
 }
@@ -111,7 +174,7 @@ button:hover {
     width: 90%;
     height: 100%;
     perspective: 2000px;
-    
+
     min-height: 40vh;
     max-height: 40vh;
     margin: 2.5vh 0;
@@ -127,7 +190,8 @@ button:hover {
     transform: rotateY('0deg');
 }
 
-.flip-card-front, .flip-card-back {
+.flip-card-front,
+.flip-card-back {
     position: absolute;
     width: 100%;
     height: 100%;
@@ -158,23 +222,23 @@ button:hover {
     justify-content: center;
     align-items: center;
     width: 100vw;
-    margin: 0; 
+    margin: 0;
 }
 
 .fourAnswers {
     white-space: pre-line;
-    width: 40vw;
+    width: 42.5vw;
     height: 20vh;
-    margin: 1vh 3vw;
-    border-radius: 2rem;
-    background-color: #0f7a334e;
-    font-size: 2.35vh;
+    margin: 1vh 2vw;
+    border-radius: 3.5vh;
+    background-color: var(--weak-green);
+    font-size: 3vh;
     transition: opacity 0.3s;
 }
 
 .fourAnswers:hover {
     border: none;
-    outline: 0.4rem solid #0f7a3386;
+    outline: 0.4rem solid var(--strong-green);
     outline-offset: -0.4rem;
 }
 
@@ -184,6 +248,8 @@ button:hover {
     display: flex;
     align-items: center;
     justify-content: center;
+    opacity: 1;
+    transition: opacity 0.4s;
 }
 
 #startButton {
@@ -197,7 +263,7 @@ button:hover {
     height: 100%;
     color: white;
     background: #5858585f;
-    border-radius: 3rem;
+    border-radius: 3.5vh;
     font-size: 3.25vh;
     display: flex;
     align-items: center;
@@ -222,6 +288,7 @@ button:hover {
 #continueButton:hover {
     background-color: white;
     border: none;
+    color: black;
 }
 
 #answersCol {
