@@ -43,14 +43,16 @@ function startGame() {
     form.addEventListener('submit', function (e) {
         e.preventDefault();
 
-        playerName = username.value;
-        username.value = "";
-        form.style.display = "none";
+        if (username.value) {
+            playerName = username.value;
+            username.value = "";
+            form.style.display = "none";
 
-        document.getElementById("landingNav").style.top = "100%";
+            document.getElementById("landingNav").style.top = "100%";
 
-        // get first question and its answers from server and display them
-        socket.emit("start", playerName, ip);
+            // get first question and its answers from server and display them
+            socket.emit("start", playerName, ip);
+        }
     });
 
     document.getElementById("gameInstructions").style.opacity = 0;
