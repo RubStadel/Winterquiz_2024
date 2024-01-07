@@ -29,8 +29,8 @@ const writeAnswersAnon = createCsvWriter({
 const writeScore = createCsvWriter({
 	path: "scores.csv",
 	header: [
-		{ id: "name", title: "NAME" },
-		{ id: "score", title: "SCORE" }
+		{ id: "NAME", title: "NAME" },
+		{ id: "SCORE", title: "SCORE" }
 	]
 });
 
@@ -122,7 +122,7 @@ io.on("connection", (socket) => {
 			playerArr[PC].paused = true;
 		}
 		else {
-			await loadScore(socket); // loadScore already emits scores
+			await loadScore(PC, socket, false); // loadScore already emits scores
 			// socket.emit("receive_scores", scores);
 		};
 	});
@@ -149,9 +149,8 @@ io.on("connection", (socket) => {
 			moderator[playerArr[PC].currNum].explanation
 		);
 		if (!playerArr[PC].unusedQuestions.length) {
-			await updateScore(PC);
-			await loadScore(socket);	// loadScore already emits scores
-			// socket.emit("receive_scores", scores);
+			// await updateScore(PC);
+			await loadScore(PC, socket, true);	// loadScore updates scores and emits "receive_scores"
 		}
 	});
 
@@ -160,28 +159,40 @@ io.on("connection", (socket) => {
 	});
 
 	socket.on("get_test", (PC, test) => {
-		// testsocket to see something from script.js
+		// testsocket to see something from scripts.js
 		// console.log(test);
 		// updateScore(PC);
 
-		// socket.emit("receive_scores", scores);
+		let testScores = [
+			{ name: "Test1", score: 1 },
+			{ name: "Test2", score: 2 },
+			{ name: "Test3", score: 3 },
+			{ name: "Test4000", score: 4 },
+			{ name: "mmmmmmmm", score: 5 },
+			{ name: "Test6", score: 6 },
+			{ name: "Test7", score: 7 },
+			{ name: "Test8", score: 8 },
+			{ name: "Test9", score: 9 },
+			{ name: "Test10", score: 10 },
+			{ name: "Test11", score: 11 },
+			{ name: "Test12", score: 2 },
+		];
+
+		socket.emit("receive_scores", testScores, "Test12");
 	});
 
 });
 async function updateScore(PC) {
-	const scoreEntry = [{
-		name: playerArr[PC].playerName,
-		score: playerArr[PC].points
-	}];
+	let scoreEntry = {
+		NAME: playerArr[PC].playerName,
+		SCORE: `${playerArr[PC].points}`
+	};
+	scores.push(scoreEntry);
 
-	writeScore.writeRecords(scoreEntry)       // returns a promise
-		.then(() => {
-			// console.log("updated score");
-			// loadScore();
-		});
+	await writeScore.writeRecords(scores);
 };
 
-async function loadScore(socket) {
+async function loadScore(PC, socket, reload) {
 	// Promise of the asynchronous file string
 	scores = [];
 	fs.createReadStream("scores.csv")
@@ -190,12 +201,11 @@ async function loadScore(socket) {
 		// This will push the object row into the array
 		.on("data", function (row) { scores.push(row) })
 
-		.on("end", function () {
-			// myResolve();
-			// console.log("load fertig");
-			// console.log("scores: ", scores);
-			socket.emit("receive_scores", scores);
-			// loadCheck = true;
+		.on("end", async function () {
+			if (reload) {
+				await updateScore(PC);
+			}
+			socket.emit("receive_scores", scores, playerArr[PC].playerName);
 		});
 };
 

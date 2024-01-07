@@ -118,6 +118,55 @@ input:focus {
     outline: 0.3vh solid var(--dark-gray);
 }
 
+ul {
+    width: 100vw;
+    padding: 0;
+    margin: 1vh 0;
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+}
+
+li {
+    overflow: hidden;
+    height: 6.5vh;
+    margin: 1.25vh 7.5vw;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    border-radius: 2vh;
+}
+
+li>div {
+    font-size: 3.75vh;
+    text-align: center;
+}
+
+#dots {
+    height: 6vh;
+    color: black;
+    background-color: transparent;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    outline: none;
+    font-size: 5.5vh;
+    margin: 0.25vh 0;
+}
+
+#userScore {
+    height: 8.5vh;
+    margin: 0.5vh 4vw;
+    box-shadow: 0 0 2vh black;
+    outline: 0.5vh solid black;
+    background-color: var(--light-gray);
+    /* background-color: black; */
+}
+
+#userScore>div {
+    font-size: 4.5vh;
+    color: white;
+}
+
 .overlay {
     height: 100%;
     width: 100%;
@@ -130,7 +179,6 @@ input:focus {
     transition: 0.55s ease-in;
     -webkit-backdrop-filter: blur(2.5vh);
     backdrop-filter: blur(2.5vh);
-    text-shadow: 0 0 0.15rem black;
 }
 
 .overlay-content {
@@ -204,7 +252,7 @@ input:focus {
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 3rem;
+    border-radius: 3.5vh;
     background-color: white;
     z-index: 2;
 }
@@ -250,6 +298,7 @@ input:focus {
     justify-content: center;
     opacity: 1;
     transition: opacity 0.4s;
+    text-shadow: 0 0 0.15vh black;
 }
 
 #startButton {

@@ -1,7 +1,7 @@
 "use strict";
 
 let socket = io();                          // starting the socket connection using socket.io library
-let playerName = "Anon";                    // placeholder // username given by the player
+let playerName = "Test12";                  // placeholder // username given by the player
 let ip;                                     // some sort of IPv6-address of the player
 let playerCount;                            // PlayerCount (PC) (to differentiate between players)
 let answerArr = [];                         // array of objects of the answers
@@ -138,15 +138,90 @@ socket.on("receive_result", (answerStatus, explanation) => {
     }, 400);
 });
 
-socket.on("receive_scores", (scores) => {                                                               // TODO: implement score diplay
-    // returns array of objects with attributes "name" and "score"
-    // sort by score descending    
-    console.log(scores);
-    scores.sort((a, b) => b.score - a.score);
-    // following 2 lines is functional pseudocode
-    let bestPlayer = scores[0].NAME;
+socket.on("receive_scores", (scores, name) => {
+    document.getElementById("scoreNav").style.height = "100%";
 
-    console.log(bestPlayer);
+    let scoresArr = scores;
+    playerName = name;
+
+    let colors = ["gold", "lightGray", "peru"];
+    let list = document.getElementById("scoreList");
+
+    let tmpLength = scores.length;
+    if (tmpLength > 8) {
+        tmpLength = 8;
+    }
+
+    scores.sort((a, b) => b.SCORE - a.SCORE);
+
+    let userIsVisible = false;
+    let userRank = scoresArr.findIndex((entry) => entry.NAME == playerName);
+    if (userRank >= 8) {
+        userIsVisible = true;
+    }
+
+    for (let i = 0; i < tmpLength; i++) {
+        let entry = document.createElement('li');
+        let entryPosition = document.createElement('div');
+        let entryName = document.createElement('div');
+        let entryScore = document.createElement('div');
+
+        if (i < 3) {
+            entry.style.boxShadow = `0 0 3.5vh ${colors[i]}`;
+            entry.style.outline = `0.5vh solid ${colors[i]}`;
+            entry.style.backgroundColor = `${colors[i]}`;
+        } else {
+            entry.style.boxShadow = `0 0 1vh ${rootStyle.getPropertyValue('--dark-gray')}`;
+            entry.style.outline = `0.25vh solid ${rootStyle.getPropertyValue('--dark-gray')}`;
+        }
+
+        entryPosition.textContent = `${[i + 1]}. `;
+        entryName.textContent = `${scores[i].NAME}, `;
+        entryScore.textContent = `${scores[i].SCORE} Punkte`;
+        if (scores[i].NAME.length > 6) {
+            entryScore.textContent = `${scores[i].SCORE} P.`;
+        }
+
+        if (i == userRank) {
+            entry.id = "userScore";
+            entry.style.outline = "0.5vh solid black";
+            entryPosition.style.color = "black";
+            entryName.style.color = "black";
+            entryScore.style.color = "black";
+        }
+
+        entry.appendChild(entryPosition);
+        entry.appendChild(entryName);
+        entry.appendChild(entryScore);
+        list.appendChild(entry);
+    }
+
+    if (scores.length > 8 && !userIsVisible) {
+        let dots = document.createElement('li');
+        dots.id = "dots";
+        dots.innerHTML = "&#x205D;";
+        list.appendChild(dots);
+
+        let user = document.createElement('li');
+        let userPosition = document.createElement('div');
+        let userName = document.createElement('div');
+        let userScore = document.createElement('div');
+
+        user.id = "userScore";
+
+        userPosition.textContent = `${userRank + 1}.`;
+        userName.textContent = `${playerName}, `;
+        userScore.textContent = `${scores[userRank].SCORE} Punkte`;
+        if (playerName.length > 6) {
+            userScore.textContent = `${scores[userRank].score} P.`;
+        }
+
+        user.appendChild(userPosition);
+        user.appendChild(userName);
+        user.appendChild(userScore);
+        list.appendChild(user);
+    }
+
 });
 
 /// function to randomize answer order

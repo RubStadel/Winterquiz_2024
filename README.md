@@ -26,27 +26,27 @@ Die Website wird durch Node.js (Express) bereitgestellt, Kommunikation läuft ü
 
 * [x] Erstellen eines ersten Entwurfs der Hauptseite
 * [x] Erstellen der Startseite, die Informationen über das Quiz enthält
-* [ ] Erstellen der Ergebnisseite, die die finale Punktzahl anzeigt
-* [ ] Implementierung des Spielflusses  
+* [x] Implementierung des Spielflusses  
   * [x] Einfügen eines Username-Formulars in/nach der Startseite
   * [x] Herausfinden, wie man mit JS die IP-Adresse ausliest und das implementieren  
     -> Temporäre IPv6-Adresse bleibt (bei meinem) Handy (standardmäßig) >= 3 Stunden erhlten und ändert sich weder bei Netzwerkwechsel noch Serverneustart
+  * [x] Erstellen der Ergebnisseite, die die finale Punktzahl anzeigt
 * [x] Implementierung der Fragenkarten-Flipanimation  
   * [x] Entscheiden, wo die Erklärung der Antwort angezeigt wird  
     -> Statt Frage ~~Statt Antworten? Auf Rückseite der Fragekarte?~~
-* [ ] Implementierung der Eiskristall-Animation
 * [x] Entscheiden, ob Rausch-Effekt verwendet werden soll  
     -> ja, mindestens für Haupt-Hintergrund
 * [x] Entscheiden, ob zwei verschiedene Schriftgrößen für kurze/lange(mehrzeilige) Antwortmöglichkeiten existieren sollen (genauso bei Erklärungen)
   * [x] Implementierung der verschiedenen Schriftgrößen (mithilfe der Länge der Anwtorten/Erklärungen)
+* [ ] Implementierung der Eiskristall-Animation
 
 ### Backend
 
 * [x] Einlesen aus externer Datei und zufälliges Auswählen der Fragen
-* [ ] Austausch mit dem Client
+* [x] Austausch mit dem Client
 * [ ] Speicherung der Ergebnisse, die der Client zurückschickt
   * [ ] Anonyme Speicherung aller Fragen mit zugehöriger Antwort (answers.csv)
-  * [ ] Speicherung der Highscores mit zugehörigem Namen (scores.csv)
+  * [x] Speicherung der Highscores mit zugehörigem Namen (scores.csv)
 * [ ] Visualisierung aller Ergebnisse (vgl. Bestenliste?)
 * [x] Erstellen eines schönen QR-Codes
 

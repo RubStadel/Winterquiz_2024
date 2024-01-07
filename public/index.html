@@ -54,15 +54,20 @@
             <p id="gameInstructions">
                 Willkommen beim Winterquiz des FSR VII!<br><br>
                 Das Quiz besteht aus acht Fragen rund um den Winter.<br>
-                Jede Frage muss in 20 Sekunden beantwortet werden.<br>
+                <!-- Jede Frage muss in 20 Sekunden beantwortet werden.<br> -->
             </p>
             <button id="startButton" onclick="initGame();">start</button>
 
             <form id="usernameForm">
-                <input type="text" id="username" placeholder="Name eingeben" maxlength="10" size="15"
-                    autocomplete="off">
+                <input type="text" id="username" placeholder="Name eingeben" maxlength="8" size="15" autocomplete="off">
                 <button>&blacktriangleright;</button>
             </form>
+        </div>
+    </div>
+
+    <div id="scoreNav" class="overlay" style="height: 0%;">
+        <div class="overlay-content">
+            <ul id="scoreList"></ul>
         </div>
     </div>
 
