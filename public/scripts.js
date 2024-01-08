@@ -1,12 +1,15 @@
 "use strict";
 
-let socket = io();                          // starting the socket connection using socket.io library
-let playerName = "Test12";                  // placeholder // username given by the player
-let ip;                                     // some sort of IPv6-address of the player
-let playerCount;                            // PlayerCount (PC) (to differentiate between players)
-let answerArr = [];                         // array of objects of the answers
-let shuffledAnswers = [];                   // array of shuffled answers
-let numSwap = [];                           // when answers are shuffled, this array keeps track
+///// library initializations and variable declarations
+
+let socket = io();                                              // starting the socket connection using socket.io library
+
+let playerName = "Test12";                                      // placeholder // username given by the player
+let ip;                                                         // some sort of IPv6-address of the player
+let playerCount;                                                // PlayerCount (PC) (to differentiate between players)
+let answerArr = [];                                             // array of objects of the answers
+let shuffledAnswers = [];                                       // array of shuffled answers
+let numSwap = [];                                               // when answers are shuffled, this array keeps track
 let pressedButtonId;
 let isConcurrentQuestion = 0;
 let flipToggle = true;
@@ -18,13 +21,24 @@ let notAnsweredYet = true;
 let root = document.querySelector(':root');
 var rootStyle = getComputedStyle(root);
 
-/// functions controlling game flow
+
+///// functions controlling game flow
+
+// function that is immediately called when the page loads
+
+function init() {
+    getIPs().then(res => {
+        // sorting array in order of length descending
+        res.sort((a, b) => b.length - a.length);
+        ip = res[0];
+        socket.emit('init', ip);                                // send ip to server to check if this user has already finished playing
+    });
+}
 
 // function to get temporary IPv6 address of the client
 
 function initGame() {
     // because this function works asynchronously, the username input is opened first (to fill the time it takes to get the ip).
-
     startGame();
 
     getIPs().then(res => {
@@ -34,7 +48,7 @@ function initGame() {
     });
 }
 
-// function to open username input form and reveal main page
+// function to open username input form and reveal main page afterwards
 
 function startGame() {
     let form = document.getElementById("usernameForm");
@@ -50,8 +64,7 @@ function startGame() {
 
             document.getElementById("landingNav").style.top = "100%";
 
-            // get first question and its answers from server and display them
-            socket.emit("start", playerName, ip);
+            socket.emit("start", playerName, ip);               // get first question and its answers from server and display them
         }
     });
 
@@ -61,6 +74,8 @@ function startGame() {
     username.focus();
 }
 
+
+///// event handlers for socket communication
 
 socket.on("receive_playernum", (PC) => {
     // directly after assigning the PC, the command to send the question is given
@@ -102,15 +117,6 @@ socket.on("receive_question", (questStr, answerArray) => {
     }
 });
 
-function checkAnswer(answerNumber) {
-    if (notAnsweredYet) {
-        pressedButtonId = `answer${answerNumber}`;
-        notAnsweredYet = false;
-
-        socket.emit("get_result", playerCount, numSwap[answerNumber]);
-    }
-}
-
 socket.on("receive_result", (answerStatus, explanation) => {
     // answerStatus true or false, explanation is a string
     let answerStat = answerStatus;
@@ -138,11 +144,14 @@ socket.on("receive_result", (answerStatus, explanation) => {
     }, 400);
 });
 
-socket.on("receive_scores", (scores, name) => {
+socket.on("receive_scores", (scores, name, points) => {
+    document.getElementById("usernameForm").style.display = "none";
+    document.getElementById("landingNav").style.top = "100%";
     document.getElementById("scoreNav").style.height = "100%";
 
     let scoresArr = scores;
     playerName = name;
+    let playerPoints = points;
 
     let colors = ["gold", "lightGray", "peru"];
     let list = document.getElementById("scoreList");
@@ -155,8 +164,9 @@ socket.on("receive_scores", (scores, name) => {
     scores.sort((a, b) => b.SCORE - a.SCORE);
 
     let userIsVisible = false;
-    let userRank = scoresArr.findIndex((entry) => entry.NAME == playerName);
-    if (userRank >= 8) {
+    let userRank = scoresArr.findIndex((entry) => entry.NAME == playerName && entry.SCORE == playerPoints);
+
+    if (userRank <= 8) {
         userIsVisible = true;
     }
 
@@ -196,12 +206,14 @@ socket.on("receive_scores", (scores, name) => {
         list.appendChild(entry);
     }
 
-    if (scores.length > 8 && !userIsVisible) {
+    if (!userIsVisible) {
         let dots = document.createElement('li');
         dots.id = "dots";
         dots.innerHTML = "&#x205D;";
         list.appendChild(dots);
+    }
 
+    if (scores.length > 8 && !userIsVisible) {
         let user = document.createElement('li');
         let userPosition = document.createElement('div');
         let userName = document.createElement('div');
@@ -221,15 +233,16 @@ socket.on("receive_scores", (scores, name) => {
         user.appendChild(userScore);
         list.appendChild(user);
     }
-
 });
 
-/// function to randomize answer order
+
+///// additional functions for various tasks
+
+// function to randomize answer order
 
 function shuffleAnswers() {
     // this function shuffles and empties the answerArr 
-    // and puts it in shuffledAnswers and keeps track
-    // of it in numSwap
+    // and puts it in shuffledAnswers and keeps track of it in numSwap
     let randNum;
     let tempArr = answerArr.slice(0, 4);
     for (let i = 0; i < 4; i++) {
@@ -242,7 +255,19 @@ function shuffleAnswers() {
     }
 }
 
-/// functions handling visual updates
+// function that is called when one of the answer buttons is clicked
+// checks if the answer was correct and tells the result to the server
+
+function checkAnswer(answerNumber) {
+    if (notAnsweredYet) {
+        pressedButtonId = `answer${answerNumber}`;
+        notAnsweredYet = false;
+
+        socket.emit("get_result", playerCount, numSwap[answerNumber]);
+    }
+}
+
+// function handling visual updates to the question card
 
 function flipQuestionCard() {
     let card = document.getElementById("flip-card-inner");

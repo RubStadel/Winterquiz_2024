@@ -176,7 +176,7 @@ li>div {
     top: 0;
     background-color: var(--overlay-blur-gray);
     overflow: hidden;
-    transition: 0.55s ease-in;
+    transition: 0.5s ease-in;
     -webkit-backdrop-filter: blur(2.5vh);
     backdrop-filter: blur(2.5vh);
 }

@@ -44,11 +44,11 @@ Die Website wird durch Node.js (Express) bereitgestellt, Kommunikation läuft ü
 
 * [x] Einlesen aus externer Datei und zufälliges Auswählen der Fragen
 * [x] Austausch mit dem Client
-* [ ] Speicherung der Ergebnisse, die der Client zurückschickt
-  * [ ] Anonyme Speicherung aller Fragen mit zugehöriger Antwort (answers.csv)
+* [x] Speicherung der Ergebnisse, die der Client zurückschickt
+  * [x] Anonyme Speicherung aller Fragen mit zugehöriger Antwort (answers.csv)
   * [x] Speicherung der Highscores mit zugehörigem Namen (scores.csv)
-* [ ] Visualisierung aller Ergebnisse (vgl. Bestenliste?)
 * [x] Erstellen eines schönen QR-Codes
+* [ ] Visualisierung aller Ergebnisse (vgl. Bestenliste?)
 
 ---
 

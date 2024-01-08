@@ -1,17 +1,24 @@
-/// library inclusions and setup of socket
+///// library inclusions and variable declarations
+
 const express = require("express");
 const app = express();
 const http = require("http");
 const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
-const csv = require("csv-parser")				// Package csv-parser
-const fs = require("fs");						// Package fs (Filestring)
-const usedIPs = [];								// array to keep track of used IPs
+const csv = require("csv-parser")								// Package csv-parser
+const fs = require("fs");										// Package fs (Filestring)
+
 // name of array is moderator because it contains all questions, answers and explanations
 // id´s: question, answer0, answer1, answer2, answer3, explanation
 const moderator = [];
+const usedIPs = [];												// array to keep track of used IPs
+let playerArr = [];												// array to fill with playerobjects
+let scores = [];												// array to fill with usernames and scores
+let playerCount = 0;											// counts the playerobjects
 
+
+///// initialize all csv writers 
 
 // init csv-writer to log into csv
 const createCsvWriter = require("csv-writer").createObjectCsvWriter;
@@ -34,24 +41,22 @@ const writeScore = createCsvWriter({
 	]
 });
 
-let playerCount = 0;	// counts the playerobjects
-let playerArr = [];		// array to fill with playerobjects
-let scores = [];		// array to fill with usernames and scores
 
-// class, for each player one object
+///// class, for each player one object
 class Player {
 	constructor(playerName, IP) {
 		this.playerName = playerName;
 		this.IP = IP;
 		// start the unused questions with 8 numbers 0-7
 		this.unusedQuestions = Array.from({ length: 8 }, (_, index) => index);
-		this.currNum;   	// current number, refers to moderator
-		this.points = 0;	// highscore points
-		this.paused = false;// variable to keep record of leaving
-		this.resultArr = []	// array with answered questions as objects
+		this.currNum;   										// current number, refers to moderator
+		this.points = 0;										// highscore points
+		this.paused = false;									// variable to keep record of leaving
+		this.resultArr = []										// array with answered questions as objects
 	}
-	// calculate new current number
-	newCurrNum(paused) {
+
+	// method to calculate new current number
+	newCurrNum(paused) {																		// wofür ist 'paused' hier als Parameter drin? Ist das noch aktuell?
 		if (this.paused) {
 			this.paused = false;
 			return this.currNum;
@@ -63,34 +68,41 @@ class Player {
 			this.currNum = this.unusedQuestions.splice(randNum, 1);
 			return this.currNum;
 		}
-		else return 8;	// 8 is impossible to get as a current number (0-7)
+		else return 8;											// 8 is impossible to get as a current number (0-7)
 	}
 }
 
-// read the csv and fill moderator (fs is always async)
+
+///// read questions from the csv and fill moderator (fs is always async)
 fs.createReadStream("moderator.csv")
 	// fs.createReadStream("mock.csv")
 	.pipe(csv({ separator: ";" }))
 
-	// This will push the object row into the array
-	.on("data", function (row) { moderator.push(row) })
+	.on("data", function (row) { moderator.push(row) })			// This will push the object row into the array
 
 	.on("end", function () { console.log("moderator full") });
 
 
-
-// send frontend files to client when they open the website
+///// send frontend files to client when they open the website
 app.use(express.static("../public"));
 
-/// eventHandlers that are active as long as a client is connected
+
+///// eventHandlers that are active as long as a client is connected
 io.on("connection", (socket) => {
+
+	// initially the player's ip address and check if they have already finished playing
+	socket.on("init", (IP) => {
+		if (usedIPs.includes(IP)) {
+			const searchIP = (obj) => obj.IP == IP;
+			socket.emit("receive_playernum", playerArr.findIndex(searchIP));
+		}
+	});
 
 	socket.on("start", (playerName, IP) => {
 		// fill playerArray with playerobjects
 		// every playerobject has a playerCount to differentiate
 		if (!usedIPs.includes(IP)) {
 			playerArr[playerCount] = new Player(playerName, IP);
-			// console.log("IP: ", IP);
 			socket.emit("receive_playernum", playerCount);
 			usedIPs[playerCount] = IP;
 			playerCount++;
@@ -99,7 +111,7 @@ io.on("connection", (socket) => {
 			// if IP of object exists, find index in playerArr
 			// because index equals value of playerArr, the index is enough
 			const searchIP = (obj) => obj.IP == IP;
-			socket.emit("receive_playernum", playerArr.findIndex(searchIP))
+			socket.emit("receive_playernum", playerArr.findIndex(searchIP));
 		}
 	});
 
@@ -122,8 +134,7 @@ io.on("connection", (socket) => {
 			playerArr[PC].paused = true;
 		}
 		else {
-			await loadScore(PC, socket, false); // loadScore already emits scores
-			// socket.emit("receive_scores", scores);
+			await loadScore(PC, socket, false); 				// loadScore automatically emits scores
 		};
 	});
 
@@ -132,11 +143,7 @@ io.on("connection", (socket) => {
 		// log anonymously
 		const logAnon = [{ question: playerArr[PC].currNum, answer: ans }];
 
-		// writeAnswersAnon.writeRecords(logAnon)       // returns a promise
-		// .then(() => {
-		//     // console.log("question and answer logged anonymously");
-		// });
-		await writeAnswersAnon.writeRecords(logAnon)       // returns a promise
+		await writeAnswersAnon.writeRecords(logAnon)       		// returns a promise
 		playerArr[PC].resultArr[playerArr[PC].currNum] = logAnon[0];
 		playerArr[PC].paused = false;
 		let tempBool = false;
@@ -149,39 +156,40 @@ io.on("connection", (socket) => {
 			moderator[playerArr[PC].currNum].explanation
 		);
 		if (!playerArr[PC].unusedQuestions.length) {
-			// await updateScore(PC);
-			await loadScore(PC, socket, true);	// loadScore updates scores and emits "receive_scores"
+			await loadScore(PC, socket, true);					// loadScore updates scores and emits "receive_scores"
 		}
 	});
 
-	socket.on("get_resultArr", (PC) => {
-		socket.emit("receive_resultArr", playerArr[PC].resultArr);
-	});
+	// socket.on("get_test", (PC, test) => {
+	// 	// testsocket to see something from scripts.js
+	// 	// console.log(test);
+	// 	// updateScore(PC);
 
-	socket.on("get_test", (PC, test) => {
-		// testsocket to see something from scripts.js
-		// console.log(test);
-		// updateScore(PC);
+	// 	let testScores = [
+	// 		{ name: "Test1", score: 1 },
+	// 		{ name: "Test2", score: 2 },
+	// 		{ name: "Test3", score: 3 },
+	// 		{ name: "Test4000", score: 4 },
+	// 		{ name: "mmmmmmmm", score: 5 },
+	// 		{ name: "Test6", score: 6 },
+	// 		{ name: "Test7", score: 7 },
+	// 		{ name: "Test8", score: 8 },
+	// 		{ name: "Test9", score: 9 },
+	// 		{ name: "Test10", score: 10 },
+	// 		{ name: "Test11", score: 11 },
+	// 		{ name: "Test12", score: 2 },
+	// 	];
 
-		let testScores = [
-			{ name: "Test1", score: 1 },
-			{ name: "Test2", score: 2 },
-			{ name: "Test3", score: 3 },
-			{ name: "Test4000", score: 4 },
-			{ name: "mmmmmmmm", score: 5 },
-			{ name: "Test6", score: 6 },
-			{ name: "Test7", score: 7 },
-			{ name: "Test8", score: 8 },
-			{ name: "Test9", score: 9 },
-			{ name: "Test10", score: 10 },
-			{ name: "Test11", score: 11 },
-			{ name: "Test12", score: 2 },
-		];
-
-		socket.emit("receive_scores", testScores, "Test12");
-	});
+	// 	socket.emit("receive_scores", testScores, "Test12", 2);
+	// });
 
 });
+
+
+///// functions handling interactions with the csv files during execution
+
+// function to update the scores
+// appends a row to the scores array and rewrites the csv file afterwards
 async function updateScore(PC) {
 	let scoreEntry = {
 		NAME: playerArr[PC].playerName,
@@ -192,24 +200,26 @@ async function updateScore(PC) {
 	await writeScore.writeRecords(scores);
 };
 
+// function to load all previous scores from the csv file and writing them into the scores array
+// after loading it automatically updates the scores (if reload is enabled) and emits the socket event "receive_scores"
 async function loadScore(PC, socket, reload) {
 	// Promise of the asynchronous file string
 	scores = [];
 	fs.createReadStream("scores.csv")
 		.pipe(csv({ separator: "," }))
 
-		// This will push the object row into the array
-		.on("data", function (row) { scores.push(row) })
+		.on("data", function (row) { scores.push(row) })		// This will push the object row into the array
 
 		.on("end", async function () {
 			if (reload) {
 				await updateScore(PC);
 			}
-			socket.emit("receive_scores", scores, playerArr[PC].playerName);
+			socket.emit("receive_scores", scores, playerArr[PC].playerName, playerArr[PC].points);
 		});
 };
 
-/// start listening on the designated port
-server.listen(3000, () => {											// start server and choose port (here: 3000)
+
+///// start listening on the designated port
+server.listen(3000, () => {
 	console.log("listening on *:3000");
 });
