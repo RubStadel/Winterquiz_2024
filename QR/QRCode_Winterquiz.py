@@ -13,11 +13,14 @@ qrOpenURL = segno.make_qr("http://141.64.205.170:3000/")
 
 # Save in an "artistic" way
 qrOpenURL.to_artistic(background="QR/Snowflake_Square.png", 
-                   target="QR/SnowflakeQR.png", scale=20, border = 0)
+                   target="QR/SnowflakeQR.png", scale=40, border = 0)
 
 # =============================================================================
 # Save in a normal way
 qrOpenURL.save("QR/Winterquiz.png", border = 0, 
-                dark = "black", light = "white", scale = 20)
+                scale = 40)
 # =============================================================================
 
+qrOpenHRZ = segno.make_qr("https://doku.bht-berlin.de/zugang/wlan")
+qrOpenHRZ.save("QR/HRZ.png", border = 0, 
+                scale = 25)
