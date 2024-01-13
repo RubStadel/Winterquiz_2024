@@ -15,6 +15,7 @@ const moderator = [];
 const usedIPs = [];												// array to keep track of used IPs
 let playerArr = [];												// array to fill with playerobjects
 let scores = [];												// array to fill with usernames and scores
+let cnt = 0;													// counter to check if it's the first time writing into scores.csv
 let playerCount = 0;											// counts the playerobjects
 
 
@@ -134,12 +135,13 @@ io.on("connection", (socket) => {
 			playerArr[PC].paused = true;
 		}
 		else {
-			await loadScore(PC, socket, false); 				// loadScore automatically emits scores
+			await sendScores(PC, socket, false); 				// sendScores automatically emits scores
 		};
 	});
 
 	// ans(wer) must be in [0,1,2,3], 0 is the right answer
 	socket.on("get_result", async (PC, ans) => {
+		let gameEnded = false;
 		// log anonymously
 		const logAnon = [{ question: playerArr[PC].currNum, answer: ans }];
 
@@ -151,58 +153,25 @@ io.on("connection", (socket) => {
 			playerArr[PC].points++;
 			tempBool = true;
 		}
-		socket.emit("receive_result",
-			tempBool,
-			moderator[playerArr[PC].currNum].explanation
-		);
+
 		if (!playerArr[PC].unusedQuestions.length) {
-			await loadScore(PC, socket, true);					// loadScore updates scores and emits "receive_scores"
+			gameEnded = true;
 		}
+
+		socket.emit("receive_result", tempBool, moderator[playerArr[PC].currNum].explanation, gameEnded);
 	});
 
-	// socket.on("get_test", (PC, test) => {
-	// 	// testsocket to see something from scripts.js
-	// 	// console.log(test);
-	// 	// updateScore(PC);
-
-	// 	let testScores = [
-	// 		{ name: "Test1", score: 1 },
-	// 		{ name: "Test2", score: 2 },
-	// 		{ name: "Test3", score: 3 },
-	// 		{ name: "Test4000", score: 4 },
-	// 		{ name: "mmmmmmmm", score: 5 },
-	// 		{ name: "Test6", score: 6 },
-	// 		{ name: "Test7", score: 7 },
-	// 		{ name: "Test8", score: 8 },
-	// 		{ name: "Test9", score: 9 },
-	// 		{ name: "Test10", score: 10 },
-	// 		{ name: "Test11", score: 11 },
-	// 		{ name: "Test12", score: 2 },
-	// 	];
-
-	// 	socket.emit("receive_scores", testScores, "Test12", 2);
-	// });
-
+	socket.on("get_scores", async (PC) => {
+		await sendScores(PC, socket, true);						// sendScores updates scores and emits "receive_scores"
+	});
 });
 
 
 ///// functions handling interactions with the csv files during execution
 
-// function to update the scores
-// appends a row to the scores array and rewrites the csv file afterwards
-async function updateScore(PC) {
-	let scoreEntry = {
-		NAME: playerArr[PC].playerName,
-		SCORE: `${playerArr[PC].points}`
-	};
-	scores.push(scoreEntry);
-
-	await writeScore.writeRecords(scores);
-};
-
 // function to load all previous scores from the csv file and writing them into the scores array
 // after loading it automatically updates the scores (if reload is enabled) and emits the socket event "receive_scores"
-async function loadScore(PC, socket, reload) {
+async function sendScores(PC, socket, reload) {
 	// Promise of the asynchronous file string
 	scores = [];
 	fs.createReadStream("scores.csv")
@@ -212,10 +181,27 @@ async function loadScore(PC, socket, reload) {
 
 		.on("end", async function () {
 			if (reload) {
-				await updateScore(PC);
+				await updateScores(PC);
 			}
 			socket.emit("receive_scores", scores, playerArr[PC].playerName, playerArr[PC].points);
 		});
+};
+
+// function to update the scores
+// appends a row to the scores array and rewrites the csv file afterwards
+async function updateScores(PC) {
+	const scoreEntry = [{
+		NAME: playerArr[PC].playerName,
+		SCORE: `${playerArr[PC].points}`
+	}];
+	scores.push(scoreEntry[0]);
+
+	if (cnt) {
+		await writeScore.writeRecords(scoreEntry);
+	} else {
+		await writeScore.writeRecords(scores);
+	}
+	cnt++;
 };
 
 

@@ -117,7 +117,7 @@ socket.on("receive_question", (questStr, answerArray) => {
     }
 });
 
-socket.on("receive_result", (answerStatus, explanation) => {
+socket.on("receive_result", (answerStatus, explanation, gameEnded) => {
     // answerStatus true or false, explanation is a string
     let answerStat = answerStatus;
     let currExplanation = explanation;
@@ -138,6 +138,11 @@ socket.on("receive_result", (answerStatus, explanation) => {
     }
 
     document.getElementById("continueButton").onclick = flipQuestionCard;
+    if (gameEnded) {
+        document.getElementById("continueButton").onclick = () => {
+            socket.emit("get_scores", playerCount);
+        };
+    }
 
     setTimeout(() => {
         document.getElementById("continueButton").style.opacity = "1";
