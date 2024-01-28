@@ -45,7 +45,7 @@ Ergebnisse werden mitsamt des gewählten Benutzernamens in *scores.csv* gespeich
 
 * Gibt es einen Timer, der abläuft?  
     Und wenn ja, wie viele Sekunden hat man zum Antworten?  
-    -> Ja, >= 15s (20s ?)
+    -> ~~Ja, >= 15s (20s ?)~~ Nein
 * Wie viele Fragen muss man beantworten?  
     -> 8
 * Wie viele Fragen gibt es?  

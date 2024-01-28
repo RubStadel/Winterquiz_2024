@@ -12,11 +12,11 @@
 
     <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/joeymalvinni/webrtc-ip/dist/bundle.dev.js"></script>
-    <script lang="javascript" src="scripts.js"></script>
+    <script lang="javascript" src="scripts.js" defer></script>
 
 </head>
 
-<body onload="init();">
+<body>
 
     <svg>
         <filter id="noiseFilter">
@@ -42,10 +42,10 @@
             </div>
         </div>
         <div class="column" id="answersCol">
-            <button class="fourAnswers" id="answer0" onclick="checkAnswer(0)">Antwort A</button>
-            <button class="fourAnswers" id="answer1" onclick="checkAnswer(1)">Antwort B</button>
-            <button class="fourAnswers" id="answer2" onclick="checkAnswer(2)">Antwort C</button>
-            <button class="fourAnswers" id="answer3" onclick="checkAnswer(3)">Antwort D</button>
+            <button class="fourAnswers" id="answer0">Antwort A</button>
+            <button class="fourAnswers" id="answer1">Antwort B</button>
+            <button class="fourAnswers" id="answer2">Antwort C</button>
+            <button class="fourAnswers" id="answer3">Antwort D</button>
         </div>
     </div>
 
@@ -56,7 +56,7 @@
                 Das Quiz besteht aus acht Fragen rund um den Winter.<br>
                 <!-- Jede Frage muss in 20 Sekunden beantwortet werden.<br> -->
             </p>
-            <button id="startButton" onclick="initGame();">start</button>
+            <button id="startButton">start</button>
 
             <form id="usernameForm">
                 <input type="text" id="username" placeholder="Name eingeben" maxlength="8" size="15" autocomplete="off">

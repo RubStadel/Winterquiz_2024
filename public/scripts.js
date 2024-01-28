@@ -21,6 +21,15 @@ let notAnsweredYet = true;
 let root = document.querySelector(':root');
 var rootStyle = getComputedStyle(root);
 
+// assignment of functions to HTML elements
+
+window.addEventListener("load", init);
+
+for (let i = 0; i < document.getElementsByClassName("fourAnswers").length; i++) {
+    document.getElementById(`answer${i}`).addEventListener("click", () => { checkAnswer(i) });
+}
+
+document.getElementById("startButton").addEventListener("click", initGame);
 
 ///// functions controlling game flow
 
@@ -137,11 +146,12 @@ socket.on("receive_result", (answerStatus, explanation, gameEnded) => {
         document.getElementById("question").style.fontSize = rootStyle.getPropertyValue('--question-small');
     }
 
-    document.getElementById("continueButton").onclick = flipQuestionCard;
+    document.getElementById("continueButton").addEventListener("click", flipQuestionCard);
     if (gameEnded) {
-        document.getElementById("continueButton").onclick = () => {
+        document.getElementById("continueButton").removeEventListener("click", flipQuestionCard);
+        document.getElementById("continueButton").addEventListener("click", () => {
             socket.emit("get_scores", playerCount);
-        };
+        });
     }
 
     setTimeout(() => {
@@ -297,5 +307,5 @@ function flipQuestionCard() {
     }
     flipToggle = !flipToggle;
 
-    document.getElementById("continueButton").onclick = {};
+    document.getElementById("continueButton").removeEventListener("click", flipQuestionCard);
 }
